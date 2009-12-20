@@ -1,14 +1,3 @@
-#summary One-sentence summary of this page.
+#summary One-Process of the basic operaions
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
-http://t1.gstatic.com/images?q=tbn:9QSpSGQx1QDsfM:http://open.salon.com/files/angelina_jolie_lips1252429650.jpg
+http://scalable-data-mining-framework.googlecode.com/files/datafeed.png
