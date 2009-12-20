@@ -1,4 +1,4 @@
-#summary Process of applying the basic operations AND,OR,NOT
+#summary Process of applying the basic operations AND,OR,NOT to versicle bit slices
 
 http://scalable-data-mining-framework.googlecode.com/files/datafeed.png
 http://scalable-data-mining-framework.googlecode.com/files/operations.png
