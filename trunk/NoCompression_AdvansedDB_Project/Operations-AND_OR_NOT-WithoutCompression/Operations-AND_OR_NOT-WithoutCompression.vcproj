@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="G:\boost_1_40"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -176,6 +176,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GenerateBitSet.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Main.cpp"
 				>
 			</File>
@@ -187,6 +191,10 @@
 			>
 			<File
 				RelativePath=".\BasicOperations.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GenerateBitSet.h"
 				>
 			</File>
 			<File
