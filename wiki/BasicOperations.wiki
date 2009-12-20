@@ -1,4 +1,4 @@
-#summary One-Process of the basic operaions
+#summary Process of the basic operaions
 
 http://scalable-data-mining-framework.googlecode.com/files/datafeed.png
 http://scalable-data-mining-framework.googlecode.com/files/operations.png
