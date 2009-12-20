@@ -1,4 +1,4 @@
-#summary Process of the basic operaions
+#summary Process of applying the basic operations AND,OR,NOT
 
 http://scalable-data-mining-framework.googlecode.com/files/datafeed.png
 http://scalable-data-mining-framework.googlecode.com/files/operations.png
