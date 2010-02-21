@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SeedMiner_Module", "SeedMiner_Module\SeedMiner_Module.vcproj", "{0B24F6DB-D708-46A7-A630-47486F1791CD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataExtraction_Module", "DataExtraction_Module\DataExtraction_Module.vcproj", "{76D7A400-8038-4F12-A8E3-8B77A53386CC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utilities_Module", "Utilities_Module\Utilities_Module.vcproj", "{A995B2C8-AB07-483B-BD27-5A4AB4E755E9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Query_Module", "Query_Module\Query_Module.vcproj", "{79D4433A-2CFF-44C6-A0B4-5A2206F25786}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Compression_Module", "Compression_Module\Compression_Module.vcproj", "{6212A208-1F45-406C-BC1D-9D39879BBAA9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Algorithm_Module", "Algorithm_Module\Algorithm_Module.vcproj", "{0056F372-12F4-4820-9619-499DCE8557BE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gui_Module", "Gui_Module\Gui_Module.vcproj", "{C8427A9D-D0E7-43A9-AA24-21B756C18531}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B24F6DB-D708-46A7-A630-47486F1791CD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0B24F6DB-D708-46A7-A630-47486F1791CD}.Debug|Win32.Build.0 = Debug|Win32
+		{0B24F6DB-D708-46A7-A630-47486F1791CD}.Release|Win32.ActiveCfg = Release|Win32
+		{0B24F6DB-D708-46A7-A630-47486F1791CD}.Release|Win32.Build.0 = Release|Win32
+		{76D7A400-8038-4F12-A8E3-8B77A53386CC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{76D7A400-8038-4F12-A8E3-8B77A53386CC}.Debug|Win32.Build.0 = Debug|Win32
+		{76D7A400-8038-4F12-A8E3-8B77A53386CC}.Release|Win32.ActiveCfg = Release|Win32
+		{76D7A400-8038-4F12-A8E3-8B77A53386CC}.Release|Win32.Build.0 = Release|Win32
+		{A995B2C8-AB07-483B-BD27-5A4AB4E755E9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A995B2C8-AB07-483B-BD27-5A4AB4E755E9}.Debug|Win32.Build.0 = Debug|Win32
+		{A995B2C8-AB07-483B-BD27-5A4AB4E755E9}.Release|Win32.ActiveCfg = Release|Win32
+		{A995B2C8-AB07-483B-BD27-5A4AB4E755E9}.Release|Win32.Build.0 = Release|Win32
+		{79D4433A-2CFF-44C6-A0B4-5A2206F25786}.Debug|Win32.ActiveCfg = Debug|Win32
+		{79D4433A-2CFF-44C6-A0B4-5A2206F25786}.Debug|Win32.Build.0 = Debug|Win32
+		{79D4433A-2CFF-44C6-A0B4-5A2206F25786}.Release|Win32.ActiveCfg = Release|Win32
+		{79D4433A-2CFF-44C6-A0B4-5A2206F25786}.Release|Win32.Build.0 = Release|Win32
+		{6212A208-1F45-406C-BC1D-9D39879BBAA9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6212A208-1F45-406C-BC1D-9D39879BBAA9}.Debug|Win32.Build.0 = Debug|Win32
+		{6212A208-1F45-406C-BC1D-9D39879BBAA9}.Release|Win32.ActiveCfg = Release|Win32
+		{6212A208-1F45-406C-BC1D-9D39879BBAA9}.Release|Win32.Build.0 = Release|Win32
+		{0056F372-12F4-4820-9619-499DCE8557BE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0056F372-12F4-4820-9619-499DCE8557BE}.Debug|Win32.Build.0 = Debug|Win32
+		{0056F372-12F4-4820-9619-499DCE8557BE}.Release|Win32.ActiveCfg = Release|Win32
+		{0056F372-12F4-4820-9619-499DCE8557BE}.Release|Win32.Build.0 = Release|Win32
+		{C8427A9D-D0E7-43A9-AA24-21B756C18531}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C8427A9D-D0E7-43A9-AA24-21B756C18531}.Debug|Win32.Build.0 = Debug|Win32
+		{C8427A9D-D0E7-43A9-AA24-21B756C18531}.Release|Win32.ActiveCfg = Release|Win32
+		{C8427A9D-D0E7-43A9-AA24-21B756C18531}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
