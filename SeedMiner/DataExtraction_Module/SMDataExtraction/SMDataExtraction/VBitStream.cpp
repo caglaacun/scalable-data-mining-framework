@@ -12,13 +12,27 @@ VBitStream::~VBitStream(void)
 }
 
 int VBitStream::oneCount(){
-	return this->_oneCount;
+	int oneCount = 0;
+	for (int i = 0 ; i < this->_bitCount ; i++)
+	{
+		if(this->_dataBitStream[i]) oneCount++;
+	}
+
+	return oneCount;
 }
 
 vector<bool> VBitStream::BitStream(){
 	return this->_dataBitStream;
 }
 
-int VBitStream::bitStreamPosition(){
-	return this->_bitStreamPosition;
+string VBitStream::bitStreamAggregation(){
+	return this->_bitAggregation;
+}
+
+void VBitStream::setBitValue(int pos, bool val){
+	this->_dataBitStream[pos] = val;
+}
+
+void VBitStream::setBitStreamAggregation(string bitAgg){
+	this->_bitAggregation = bitAgg;
 }

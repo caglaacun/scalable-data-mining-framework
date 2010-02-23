@@ -13,12 +13,14 @@ public:
 	__declspec(dllexport) int noOfRows();
 	__declspec(dllexport) int noOfAttributes();
 	__declspec(dllexport) void encodeAtrributes();
-	void encodeIntAttributes();
+	__declspec(dllexport) vector<EncodedIntAttribute*> codedIntAtts();
+	void encodeIntAttributes(vector<PureIntAttInfo*> intAtts);
+	
 
 
 private:
 	DBQueryExecution _queryDataInfo;
-	vector<EncodedIntAttribute> _codedIntAtts;
+	vector<EncodedIntAttribute*> _codedIntAtts;
 	int _noOfRows;
 	int _noOfAttributes;
 

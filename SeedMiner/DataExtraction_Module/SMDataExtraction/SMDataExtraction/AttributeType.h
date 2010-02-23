@@ -1,3 +1,5 @@
+#pragma once
+
 struct Type 
 {
 	static const int UNSIGNED_INT = 0;

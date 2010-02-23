@@ -21,7 +21,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	
 	//Testing the Library for executing query statements and binding data.
-	const char* statement="select TOP(50) StartDate from DimProduct";
+	const char* statement="select TOP(20) AccountCodeAlternateKey from DimAccount";
 	DBQueryExecution cExec(statement);
 	if ((cExec.ExecuteQueryAndBindData(cCon.DBConnectionPtr())))
 	{
@@ -75,7 +75,22 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 
-	WrapDataSource ds(cExec);
+	WrapDataSource *ds = new WrapDataSource(cExec);
+	ds->encodeAtrributes();
+
+	for (int i = 0 ; i < ds->codedIntAtts().size() ; i++)
+	{
+		EncodedIntAttribute* intAtt = ds->codedIntAtts()[i];
+		cout<<intAtt->attributeName()<<endl;
+		for (int j = 0; j < intAtt->NoOfVBitStreams() ; j++)
+		{
+			for (int k = 0 ; k < ds->noOfRows() ; k++)
+			{
+				cout<<intAtt->vBitStreams()[j]->BitStream()[k];
+			}
+			cout<<endl;
+		}
+	}
 	
 	return 0;
 
