@@ -16,10 +16,13 @@ public:
 	__declspec(dllexport) void setBitStreamAggregation(string bitAgg);  
 	__declspec(dllexport) int oneCount();
 	__declspec(dllexport) string bitStreamAggregation();
+	__declspec(dllexport) int bitStreamAllocAttID();
+	__declspec(dllexport) void setBitStreamAllocAttID(int attID);
 
 	
 private:
 	vector<bool> _dataBitStream;
 	int _bitCount;
-	string _bitAggregation; //0 based position
+	string _bitAggregation;
+	int _bitStreamAllocAttID;
 };

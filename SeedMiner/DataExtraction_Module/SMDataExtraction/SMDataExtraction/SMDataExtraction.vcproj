@@ -232,6 +232,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\EncodedMultiCatAttribute.h"
+					>
+				</File>
+				<File
 					RelativePath=".\MultiCatDataInfo.h"
 					>
 				</File>
@@ -343,6 +347,10 @@
 				>
 				<File
 					RelativePath=".\EncodedIntAttribute.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\EncodedMultiCatAttribute.cpp"
 					>
 				</File>
 				<File

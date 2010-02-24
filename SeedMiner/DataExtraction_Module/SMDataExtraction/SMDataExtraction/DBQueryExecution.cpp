@@ -49,6 +49,7 @@ namespace DBQueryExecutionInfo{
 
 					intAtt->type = Type.SIGNED_INT;
 					intAtt->attName = pCur->getColumn(it)->szName;
+					intAtt->attID = it;
 					
 					intAtt->setLower((int)(pow(2.0,31.0) - 1));
 					intAtt->setUpper((int)((pow(2.0,31.0) - 1)) * -1);
@@ -78,6 +79,7 @@ namespace DBQueryExecutionInfo{
 
 					doubleAtt->type = Type.SIGNED_INT;
 					doubleAtt->attName = pCur->getColumn(it)->szName;
+					doubleAtt->attID = it;
 
 					doubleAtt->setLower(pow(2.0,63.0) - 1);
 					doubleAtt->setUpper((pow(2.0,63.0) - 1) * -1);
@@ -108,6 +110,8 @@ namespace DBQueryExecutionInfo{
 				{
 					PureStringAttInfo *stringAtt = new PureStringAttInfo();
 					stringAtt->type = Type.MULTI_CAT;
+					stringAtt->attID = it;
+					stringAtt->attName = pCur->getColumn(it)->szName;
 
 					string* values = new string[rowCount];
 					int temp = 0;
@@ -125,6 +129,7 @@ namespace DBQueryExecutionInfo{
 				{
 					PureIntAttInfo *intAtt = new PureIntAttInfo();
 					intAtt->type=Type.TYPE_DATE;
+					intAtt->attID = it;
 
 					long int* values = new long int[rowCount];
 					int temp = 0;
