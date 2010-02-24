@@ -173,65 +173,77 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\AttributeType.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DBConnection.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DBQueryExecution.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DSNDriverInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EncodedIntAttribute.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MultiCatDataInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PureAttInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PureDoubleAttInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PureIntAttInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PureStringAttInfo.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\stdhead.h"
 				>
 			</File>
 			<File
 				RelativePath=".\targetver.h"
 				>
 			</File>
-			<File
-				RelativePath=".\VBitStream.h"
+			<Filter
+				Name="PureDataInfoHeaders"
 				>
-			</File>
-			<File
-				RelativePath=".\WrapDataSource.h"
+				<File
+					RelativePath=".\PureAttInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PureDoubleAttInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PureIntAttInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PureStringAttInfo.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="DBFrameworkHeaders"
 				>
-			</File>
+				<File
+					RelativePath=".\DBConnection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\DBQueryExecution.h"
+					>
+				</File>
+				<File
+					RelativePath=".\DSNDriverInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\stdhead.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="EncodedDataInfoHeaders"
+				>
+				<File
+					RelativePath=".\AttributeType.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EncodedIntAttribute.h"
+					>
+				</File>
+				<File
+					RelativePath=".\MultiCatDataInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\VBitStream.h"
+					>
+				</File>
+				<File
+					RelativePath=".\WrapDataSource.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -244,14 +256,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath=".\DBConnection.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DBQueryExecution.cpp"
-				>
-			</File>
 			<File
 				RelativePath=".\dllmain.cpp"
 				>
@@ -273,34 +277,6 @@
 						CompileAsManaged="0"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\DSNDriverInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EncodedIntAttribute.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MultiCatDataInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PureAttInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PureDoubleAttInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PureIntAttInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PureStringAttInfo.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\SMDataExtraction.cpp"
@@ -326,14 +302,62 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\VBitStream.cpp"
+			<Filter
+				Name="DBFrameworkSource"
 				>
-			</File>
-			<File
-				RelativePath=".\WrapDataSource.cpp"
+				<File
+					RelativePath=".\DBConnection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DBQueryExecution.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DSNDriverInfo.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="PureDataInfoSource"
 				>
-			</File>
+				<File
+					RelativePath=".\PureAttInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PureDoubleAttInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PureIntAttInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PureStringAttInfo.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="EncodedDataInfoSource"
+				>
+				<File
+					RelativePath=".\EncodedIntAttribute.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MultiCatDataInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\VBitStream.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WrapDataSource.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
