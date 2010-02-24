@@ -10,4 +10,5 @@ public:
 	~PureAttInfo(void);
 	int type;
 	std::string attName;
+	int attID;
 };

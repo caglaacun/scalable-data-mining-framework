@@ -32,6 +32,10 @@ ATT_TYPE EncodedIntAttribute::attributeType(){
 	return this->_attType;
 }
 
+int EncodedIntAttribute::attributeID(){
+	return this->_attID;
+}
+
 void EncodedIntAttribute::setVBitStreamSize(int size){
 	this->_vBitStreamSet.resize(size);
 }
@@ -73,6 +77,10 @@ int EncodedIntAttribute::decodeTheTuple(int tupleID){
 
 void EncodedIntAttribute::setAttName(string name){
 	this->_attName = name;
+}
+
+void EncodedIntAttribute::setAttID(int attID){
+	this->_attID = attID;
 }
 
 void EncodedIntAttribute::setAttType(ATT_TYPE type){

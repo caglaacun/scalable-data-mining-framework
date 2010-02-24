@@ -29,10 +29,18 @@ string VBitStream::bitStreamAggregation(){
 	return this->_bitAggregation;
 }
 
+int VBitStream::bitStreamAllocAttID(){
+	return this->_bitStreamAllocAttID;
+}
+
 void VBitStream::setBitValue(int pos, bool val){
 	this->_dataBitStream[pos] = val;
 }
 
 void VBitStream::setBitStreamAggregation(string bitAgg){
 	this->_bitAggregation = bitAgg;
+}
+
+void VBitStream::setBitStreamAllocAttID(int attID){
+	this->_bitStreamAllocAttID = attID;
 }

@@ -21,7 +21,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	
 	//Testing the Library for executing query statements and binding data.
-	const char* statement="select TOP(20) AccountCodeAlternateKey from DimAccount";
+	const char* statement="select TOP(65) Occupation from ProspectiveBuyer";
 	DBQueryExecution cExec(statement);
 	if ((cExec.ExecuteQueryAndBindData(cCon.DBConnectionPtr())))
 	{
@@ -65,7 +65,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			cout<<retrievedStringData[i]->ValueList()[j]<<endl;
 		}
 
-		cout<<"Testing Unique Data Received"<<endl;
+		cout<<endl<<"Testing Unique Data Received"<<endl;
 
 		//Represents the unique string data.
 		vector<string> uniqueData = retrievedStringData[i]->uniqueValueList();
@@ -82,11 +82,36 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		EncodedIntAttribute* intAtt = ds->codedIntAtts()[i];
 		cout<<intAtt->attributeName()<<endl;
+		cout<<intAtt->attributeID()<<endl;
 		for (int j = 0; j < intAtt->NoOfVBitStreams() ; j++)
 		{
+			cout<<"Attribute ID: "<<intAtt->vBitStreams()[j]->bitStreamAllocAttID()<<" ";
 			for (int k = 0 ; k < ds->noOfRows() ; k++)
 			{
 				cout<<intAtt->vBitStreams()[j]->BitStream()[k];
+			}
+			cout<<endl;
+		}
+	}
+
+	for (int j = 0 ; j < ds->codedStringAtts().size() ; j++)
+	{
+		EncodedMultiCatAttribute* multiCatAtt = ds->codedStringAtts()[j];
+		cout<<endl<<endl<<multiCatAtt->attributeName()<<endl;
+		cout<<multiCatAtt->attributeID()<<endl;
+		cout<<"No Of Unique Data Values : " <<multiCatAtt->noOfUniqueValues()<<endl;
+		
+		for (int i = 0 ; i < multiCatAtt->noOfUniqueValues() ; i++)
+		{
+			cout<< i << " - " << cExec.RetrievedStringData()[j]->uniqueValueList()[i]<<endl;
+		}
+
+		for (int k = 0 ; k < multiCatAtt->NoOfVBitStreams() ; k++)
+		{
+			cout<<"Attribute ID: "<<multiCatAtt->vBitStreams()[k]->bitStreamAllocAttID()<<" ";
+			for (int l=0 ; l < ds->noOfRows() ; l++)
+			{
+				cout<<multiCatAtt->vBitStreams()[k]->BitStream()[l];
 			}
 			cout<<endl;
 		}

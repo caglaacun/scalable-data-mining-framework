@@ -1,6 +1,7 @@
 #pragma once
 #include "DBQueryExecution.h"
 #include "EncodedIntAttribute.h"
+#include "EncodedMultiCatAttribute.h"
 #include <vector>
 
 using namespace DBQueryExecutionInfo;
@@ -14,13 +15,15 @@ public:
 	__declspec(dllexport) int noOfAttributes();
 	__declspec(dllexport) void encodeAtrributes();
 	__declspec(dllexport) vector<EncodedIntAttribute*> codedIntAtts();
+	__declspec(dllexport) vector<EncodedMultiCatAttribute*> codedStringAtts();
 	void encodeIntAttributes(vector<PureIntAttInfo*> intAtts);
-	
+	void encodeStringAttributes(vector<PureStringAttInfo*> stringAtts);
 
 
 private:
 	DBQueryExecution _queryDataInfo;
 	vector<EncodedIntAttribute*> _codedIntAtts;
+	vector<EncodedMultiCatAttribute*> _codedStringAtts;
 	int _noOfRows;
 	int _noOfAttributes;
 
