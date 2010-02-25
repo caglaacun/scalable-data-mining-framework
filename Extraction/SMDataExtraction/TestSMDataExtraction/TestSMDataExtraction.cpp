@@ -6,6 +6,7 @@
 #include "DBQueryExecution.h"
 #include "WrapDataSource.h"
 #include "DecodedTuple.h"
+#include "EncodedAttributeInfo.h"
 #include <iostream>
 
 using namespace std;
@@ -79,70 +80,89 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	WrapDataSource *ds = new WrapDataSource(cExec);
 	ds->encodeAtrributes();
+	//Testing whether a particular attribute can be retrieved given the attribute ID.
+	EncodedAttributeInfo* att = (*ds)(1);
+
+	//Testing whether a particular vBitStream can be retrieved given the bitStream ID;
+	//In fact there are two ways in doing so which is explaining in the below illustration.
+	VBitStream* bit_1 = (*ds)(1,0);
+	VBitStream* bit_2 = (*att)(0);
+
+	for (int i = 0 ; i < ds->codedAttributes().size() ; i++)
+	{
+		switch (ds->codedAttributes()[i]->attributeType())
+		{
+			//use the attribute type to decide what kind of an abject is wrapped by
+			//the higher level EncodedAttributeInfo object pointer.
+		case (ATT_TYPE::SIGNEDINT_VAL):
+			{
+				EncodedIntAttribute *intAtt = static_cast<EncodedIntAttribute*> (ds->codedAttributes()[i]);
+				cout<<intAtt->attributeName()<<endl;
+				cout<<intAtt->attributeID()<<endl;
+				for (int j = 0; j < intAtt->NoOfVBitStreams() ; j++)
+				{
+					cout<<"Attribute ID: "<<intAtt->vBitStreams()[j]->bitStreamAllocAttID()<<" ";
+					for (int k = 0 ; k < ds->noOfRows() ; k++)
+					{
+						cout<<intAtt->vBitStreams()[j]->BitStream()[k];
+					}
+					cout<<endl;
+				}
+
+				//Testing the method for retrieving a bit stream on given index.
+				//VBitStream* vBitStream = intAtt->bitStreamAt(2);
+
+				VBitStream* vBitStream = (*intAtt)(1);
+				for (int j=0 ; j<ds->noOfRows() ; j++)
+				{
+					cout<<vBitStream->BitStream()[j];
+				}
+
+				//Decode a particular tuple upon given a tuple ID.
+				cout<<endl<<intAtt->decodeTheTuple(20)<<endl;;
+				break;
+			}
+
+		case (ATT_TYPE::MULTICAT_VAL):
+			{
+				EncodedMultiCatAttribute* multiCatAtt = static_cast<EncodedMultiCatAttribute*> (ds->codedAttributes()[i]);
+				cout<<endl<<endl<<multiCatAtt->attributeName()<<endl;
+				cout<<multiCatAtt->attributeID()<<endl;
+				cout<<"No Of Unique Data Values : " <<multiCatAtt->noOfUniqueValues()<<endl;
+
+				for (int i = 0 ; i < multiCatAtt->noOfUniqueValues() ; i++)
+				{
+					cout<< i << " - " << multiCatAtt->uniqueValList()[i]<<endl;
+				}
+
+				for (int k = 0 ; k < multiCatAtt->NoOfVBitStreams() ; k++)
+				{
+					cout<<"Attribute ID: "<<multiCatAtt->vBitStreams()[k]->bitStreamAllocAttID()<<" ";
+					for (int l=0 ; l < ds->noOfRows() ; l++)
+					{
+						cout<<multiCatAtt->vBitStreams()[k]->BitStream()[l];
+					}
+					cout<<endl;
+				}
+
+				//Testing the method for retrieving a bit stream on given a bit stream index.
+				//For convenience the same duty can be achieved by using parenthesis operator
+				// eg: multicat(2)
+				//VBitStream* vBitStream = multiCatAtt.bitStreamAt(1);
+				VBitStream* vBitStream = (*multiCatAtt)(1);
+				for (int j=0 ; j<ds->noOfRows() ; j++)
+				{
+					cout<<vBitStream->BitStream()[j];
+				}
+
+				//Decode a particular tuple upon given a tuple ID.
+				cout<<endl<<multiCatAtt->decodeTheTuple(5)<<endl;;
+				break;
+			}
+		}
+	}
 	
-	for (int i = 0 ; i < ds->codedIntAtts().size() ; i++)
-	{
-		EncodedIntAttribute intAtt = *ds->codedIntAtts()[i];
-		cout<<intAtt.attributeName()<<endl;
-		cout<<intAtt.attributeID()<<endl;
-		for (int j = 0; j < intAtt.NoOfVBitStreams() ; j++)
-		{
-			cout<<"Attribute ID: "<<intAtt.vBitStreams()[j]->bitStreamAllocAttID()<<" ";
-			for (int k = 0 ; k < ds->noOfRows() ; k++)
-			{
-				cout<<intAtt.vBitStreams()[j]->BitStream()[k];
-			}
-			cout<<endl;
-		}
 
-		//Testing the method for retrieving a bit stream on given index.
-		//VBitStream* vBitStream = intAtt->bitStreamAt(2);
-		
-		VBitStream* vBitStream = intAtt(1);
-		for (int j=0 ; j<ds->noOfRows() ; j++)
-		{
-			cout<<vBitStream->BitStream()[j];
-		}
-
-		//Decode a particular tuple upon given a tuple ID.
-		cout<<endl<<intAtt.decodeTheTuple(20)<<endl;;
-	}
-
-	for (int j = 0 ; j < ds->codedStringAtts().size() ; j++)
-	{
-		EncodedMultiCatAttribute multiCatAtt = *ds->codedStringAtts()[j];
-		cout<<endl<<endl<<multiCatAtt.attributeName()<<endl;
-		cout<<multiCatAtt.attributeID()<<endl;
-		cout<<"No Of Unique Data Values : " <<multiCatAtt.noOfUniqueValues()<<endl;
-		
-		for (int i = 0 ; i < multiCatAtt.noOfUniqueValues() ; i++)
-		{
-			cout<< i << " - " << cExec.RetrievedStringData()[j]->uniqueValueList()[i]<<endl;
-		}
-
-		for (int k = 0 ; k < multiCatAtt.NoOfVBitStreams() ; k++)
-		{
-			cout<<"Attribute ID: "<<multiCatAtt.vBitStreams()[k]->bitStreamAllocAttID()<<" ";
-			for (int l=0 ; l < ds->noOfRows() ; l++)
-			{
-				cout<<multiCatAtt.vBitStreams()[k]->BitStream()[l];
-			}
-			cout<<endl;
-		}
-
-		//Testing the method for retrieving a bit stream on given a bit stream index.
-		//For convenience the same duty can be achieved by using parenthesis operator
-		// eg: multicat(2)
-		//VBitStream* vBitStream = multiCatAtt.bitStreamAt(1);
-		VBitStream* vBitStream = multiCatAtt(1);
-		for (int j=0 ; j<ds->noOfRows() ; j++)
-		{
-			cout<<vBitStream->BitStream()[j];
-		}
-
-		//Decode a particular tuple upon given a tuple ID.
-		cout<<endl<<multiCatAtt.DecodeTheTuple(5)<<endl;;
-	}
 
 	//Testing the decoding an entire tuple ability.
 	int tupID = 3;

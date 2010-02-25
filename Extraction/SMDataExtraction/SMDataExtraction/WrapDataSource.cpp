@@ -70,6 +70,7 @@ void WrapDataSource::encodeIntAttributes(vector<PureIntAttInfo*> intAtts){
 			}
 		}
 		this->_codedIntAtts.push_back(encodedIntAtt);
+		this->_codedAtts.insert(this->_codedAtts.begin(),encodedIntAtt->attributeID(),encodedIntAtt);
 	}
 }
 
@@ -95,6 +96,7 @@ void WrapDataSource::encodeStringAttributes(vector<PureStringAttInfo*> stringAtt
 			}
 		}
 		this->_codedStringAtts.push_back(multiCatAtt);
+		this->_codedAtts.insert(this->_codedAtts.begin(),multiCatAtt->attributeID(),multiCatAtt);
 	}
 }
 
@@ -109,9 +111,10 @@ vector<EncodedMultiCatAttribute*> WrapDataSource::codedStringAtts(){
 
 Tuple* WrapDataSource::DecodeTheTuple(int tupleID){
 	Tuple* decodedTuple = new Tuple();
+
 	vector<PureIntAttInfo*> intTuples;
 	vector<PureStringAttInfo*> stringTuples;
-	
+
 	for (int i=0 ; i < this->_codedIntAtts.size() ; i++)
 	{
 		PureIntAttInfo* intAtt = new PureIntAttInfo();
@@ -125,13 +128,12 @@ Tuple* WrapDataSource::DecodeTheTuple(int tupleID){
 		intAtt->attName = this->_codedIntAtts[i]->attributeName();
 		intAtt->type =  this->_codedIntAtts[i]->attributeType();
 
-		intTuples.push_back(intAtt);
 	}
 
 	for (int j=0 ; j < this->_codedStringAtts.size() ; j++)
 	{
 		PureStringAttInfo* strAtt=new PureStringAttInfo();
-		string val = this->_codedStringAtts[j]->DecodeTheTuple(tupleID);
+		string val = this->_codedStringAtts[j]->decodeTheTuple(tupleID);
 		string* vals = new string[1];
 		vals[0] = val;
 		strAtt->setValueList(vals,1);
@@ -146,4 +148,16 @@ Tuple* WrapDataSource::DecodeTheTuple(int tupleID){
 	decodedTuple->setDecodedStrings(stringTuples);
 
 	return decodedTuple;
+}
+
+vector<EncodedAttributeInfo*> WrapDataSource::codedAttributes(){
+	return this->_codedAtts;
+}
+
+EncodedAttributeInfo* WrapDataSource::operator ()(const int attID){
+	return this->_codedAtts[attID];
+}
+
+VBitStream* WrapDataSource::operator ()(const int attID, const int BitStreamID){
+	return (*(this->_codedAtts[attID]))(BitStreamID);
 }
