@@ -20,9 +20,9 @@ int tmain(int argc, _TCHAR* argv[])
 		}		
 	}
 	cout << "Original Stream st1 : " << x << endl;
-	st1->buildArray(x);	
+	
 	cout << "st1 Array : " << endl;
-	st1->printArray();
+	
 
 	//x.flip();
 	for (int i = 0 ; i < x.size() ; i++)
@@ -37,7 +37,8 @@ int tmain(int argc, _TCHAR* argv[])
 	cout << "Original Stream st1 : " << x << endl;
 	st2->buildArray(x);	
 
-	st1->compressWords();
+	st1->compressWords(x);
+	st1->printArray();
 	cout << "st1 Print Vector : " <<endl;
 	st1->printVector();
 	st2->compressWords();	

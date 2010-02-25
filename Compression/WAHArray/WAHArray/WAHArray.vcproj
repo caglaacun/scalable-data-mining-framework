@@ -196,7 +196,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Test2.cpp"
+				RelativePath=".\TestWAHArray.cpp"
 				>
 			</File>
 			<File
@@ -223,6 +223,10 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TestWAHArray.h"
 				>
 			</File>
 			<File
