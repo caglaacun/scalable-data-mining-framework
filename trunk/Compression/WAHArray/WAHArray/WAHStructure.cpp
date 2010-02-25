@@ -11,7 +11,7 @@ WAHStructure::~WAHStructure(void)
 }
 void WAHStructure::buildArray(boost::dynamic_bitset<>& bitMap)
 {
-	count = bitMap.count();
+	//count = bitMap.count();
 	mainArraySize = floor(((float)bitMap.size()/(float)(WORD_SIZE-1)));
 	mainArray = new int[mainArraySize];
 	activeWordSize = bitMap.size() - mainArraySize * (WORD_SIZE-1);
@@ -42,6 +42,49 @@ void WAHStructure::buildArray(boost::dynamic_bitset<>& bitMap)
 		mainArray[mainArrayIndex++] = temp.to_ulong();		
 	}
 }
+unsigned long long WAHStructure::count()
+{
+	vector<unsigned long int>::iterator value_iterator = compressedStreamVector.begin();
+	unsigned long long countVal = 0;
+	while(value_iterator != compressedStreamVector.end())
+	{
+		unsigned long int temp_value = *(value_iterator);
+		int startBit = getStartBitValue(temp_value);
+		if (LITERAL_WORD == startBit)
+		{
+			countVal += getLiteralCount(temp_value);
+		}else if (ONE_GAP_WORD == startBit)
+		{
+			countVal += ((WORD_SIZE -1)*(temp_value - ONE_GAP_START_FLAG));
+		}
+		value_iterator++;
+	}
+
+	if (ActiveWordSize() > 0)
+	{
+		unsigned long active  = ActiveWord();
+		countVal += getLiteralCount(active);
+	}
+return countVal;
+}
+
+
+unsigned long int WAHStructure::getLiteralCount(unsigned long int &bitLiteral)
+{
+	unsigned long int result = 0;
+	typedef const unsigned char type_byte;
+	type_byte * bytePtr = static_cast<type_byte *>(static_cast<const void *>(&bitLiteral));
+	int length = sizeof(bitLiteral);
+	while(length)
+	{
+		result += boost::detail::dynamic_bitset_count_impl::count_table<>::table[*(bytePtr)];
+		bytePtr++;
+		length--;
+	}
+
+	return result;
+}
+
 void WAHStructure::printArray()
 {
 	for (int i=0;i < mainArraySize ; i++)
@@ -54,12 +97,14 @@ void WAHStructure::printArray()
 	}
 }
 
-void WAHStructure::compressWords()
+void WAHStructure::compressWords( boost::dynamic_bitset<>& bitMap )
 {	
 	int i = 0;
 	int tempIndex = 0;
 	int oneCount = 0;
 	int zeroCount = 0;
+
+	buildArray(bitMap);
 	while(i < mainArraySize){
 		if (mainArray[i] == 0)
 		{
@@ -200,11 +245,6 @@ void WAHStructure::copyIntegerToBitMap(dynamic_bitset<> &bitmap,int index)
 	}
 }
 
-void WAHStructure::printCount()
-{
-	cout << "Count : "<<count <<endl;
-}
-
 void WAHStructure::flip()
 {
 	if (activeWord > 0)
@@ -228,8 +268,7 @@ void WAHStructure::flip()
 				}
 			}
 		}
-	}
-	count = mainArraySize * (WORD_SIZE -1) + 32 - count;
+	}	
 }
 
 WAHStructure * WAHStructure::operator &(WAHStructure & structure)
@@ -808,4 +847,20 @@ dynamic_bitset<> WAHStructure::decompress()
 		}
 	}
 	return resultBitset;
+}
+WAHStructure * WAHStructure::operator !(){
+WAHStructure * result = new WAHStructure();
+vector<unsigned long int> newCompressedStream;
+vector<unsigned long int>::iterator vectorIterator  = compressedStreamVector::begin();
+//while(vectorIterator != compressedStreamVector.end())
+//{
+//int startBitValue = getStartBitValue(*(vectorIterator));
+//if (startBitValue == LITERAL_WORD)
+//{
+//	newCompressedStream
+//}
+//
+//}
+
+return result;
 }

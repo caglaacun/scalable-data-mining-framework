@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "BitsetGenerator.h"
+#include <iostream>
 
 BitsetGenerator::BitsetGenerator(void)
 {
@@ -86,3 +87,43 @@ dynamic_bitset<> BitsetGenerator::getMiddleCompressedBitset(int length, int comp
 	return result;
 }
 
+dynamic_bitset<> BitsetGenerator::getRandomBitStream(int length,int onePercent)
+{
+	dynamic_bitset<> result(length);
+	vector<int> oneVector = getOneBitPositions(length,onePercent);
+	for (int i=0; i < oneVector.size(); i++)
+	{
+		result[oneVector[i]] = 1;
+	}
+
+	return result;
+}
+
+vector<int> BitsetGenerator::getOneBitPositions(int length, int onePercent)
+{
+	vector<int> result;
+	int trueBitNumber = (onePercent * length)/100;
+	int i = 0;
+	while(i < trueBitNumber)
+	{		
+		int randdomNum = rand();		
+		if (!contains(randdomNum,result) && (randdomNum < length) )
+		{
+			result.push_back(randdomNum);
+			i++;
+		}
+		
+	}
+return result;
+}
+
+bool BitsetGenerator::contains(const int &val,vector<int> & inputVector)
+{
+	bool state = false;
+	vector<int>::iterator iteratorType = find(inputVector.begin(),inputVector.end(),val);
+	if (iteratorType != inputVector.end())
+	{
+		state = true;
+	}
+	return state;
+}
