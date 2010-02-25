@@ -232,6 +232,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\EncodedAttributeInfo.h"
+					>
+				</File>
+				<File
 					RelativePath=".\EncodedIntAttribute.h"
 					>
 				</File>
@@ -353,6 +357,10 @@
 			<Filter
 				Name="EncodedDataInfoSource"
 				>
+				<File
+					RelativePath=".\EncodedAttributeInfo.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\EncodedIntAttribute.cpp"
 					>
