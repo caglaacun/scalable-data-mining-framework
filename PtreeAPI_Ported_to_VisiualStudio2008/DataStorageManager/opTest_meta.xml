@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<datasetinfo>
+	<description>
+		<title>Frequent itemsets</title>
+	</description>
+        <cardinality>16</cardinality>
+	<delimiter>comma</delimiter>
+	<multi_cat_delim>tab</multi_cat_delim>
+	<data_file name="mbr.data">
+           <attribute>
+		<name>milk</name>
+		<type>int</type>
+			<domain>
+				<lower>0</lower>
+				<upper>1</upper>
+			</domain>
+            </attribute>
+<attribute>
+		<name>butter</name>
+		<type>int</type>
+			<domain>
+				<lower>0</lower>
+				<upper>1</upper>
+			</domain>
+            </attribute>
+<attribute>
+		<name>tv</name>
+		<type>int</type>
+			<domain>
+				<lower>0</lower>
+				<upper>1</upper>
+			</domain>
+</attribute>
+<attribute>
+		<name>tvCablepaper</name>
+		<type>int</type>
+			<domain>
+				<lower>0</lower>
+				<upper>1</upper>
+			</domain>
+</attribute>
+ <attribute>
+		<name>vcrCable</name>
+		<type>int</type>
+			<domain>
+				<lower>0</lower>
+				<upper>1</upper>
+                        </domain>
+
+ </attribute>
+<attribute>
+		<name>pencil</name>
+		<type>int</type>
+			<domain>
+				<lower>0</lower>
+				<upper>1</upper>
+			</domain>
+</attribute>
+<attribute>
+		<name>pen</name>
+		<type>int</type>
+			<domain>
+				<lower>0</lower>
+				<upper>1</upper>
+			</domain>
+</attribute>
+<attribute>
+                <name>cokies</name>
+		<type>int</type>
+			<domain>
+				<lower>0</lower>
+				<upper>1</upper>
+			</domain>
+ </attribute>
+	</data_file>
+</datasetinfo>
+		

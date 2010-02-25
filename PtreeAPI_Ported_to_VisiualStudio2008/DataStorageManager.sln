@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataStorageManager", "DataStorageManager\DataStorageManager.vcproj", "{E971D691-A883-48FB-A891-10AC62C6325D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dci", "dci\dci.vcproj", "{423D6625-135D-40AD-9285-B03D1F8DF657}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "info", "info\info.vcproj", "{8F083D26-9C98-4696-8020-4E8A9CE7FC7A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "util\util.vcproj", "{B2CB20EC-72FA-49FC-9DC7-40ACFF63F836}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dmi", "dmi\dmi.vcproj", "{B4AE99D0-74BD-458E-9B1C-7A5F39E84B3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E971D691-A883-48FB-A891-10AC62C6325D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E971D691-A883-48FB-A891-10AC62C6325D}.Debug|Win32.Build.0 = Debug|Win32
+		{E971D691-A883-48FB-A891-10AC62C6325D}.Release|Win32.ActiveCfg = Release|Win32
+		{E971D691-A883-48FB-A891-10AC62C6325D}.Release|Win32.Build.0 = Release|Win32
+		{423D6625-135D-40AD-9285-B03D1F8DF657}.Debug|Win32.ActiveCfg = Debug|Win32
+		{423D6625-135D-40AD-9285-B03D1F8DF657}.Debug|Win32.Build.0 = Debug|Win32
+		{423D6625-135D-40AD-9285-B03D1F8DF657}.Release|Win32.ActiveCfg = Release|Win32
+		{423D6625-135D-40AD-9285-B03D1F8DF657}.Release|Win32.Build.0 = Release|Win32
+		{8F083D26-9C98-4696-8020-4E8A9CE7FC7A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8F083D26-9C98-4696-8020-4E8A9CE7FC7A}.Debug|Win32.Build.0 = Debug|Win32
+		{8F083D26-9C98-4696-8020-4E8A9CE7FC7A}.Release|Win32.ActiveCfg = Release|Win32
+		{8F083D26-9C98-4696-8020-4E8A9CE7FC7A}.Release|Win32.Build.0 = Release|Win32
+		{B2CB20EC-72FA-49FC-9DC7-40ACFF63F836}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B2CB20EC-72FA-49FC-9DC7-40ACFF63F836}.Debug|Win32.Build.0 = Debug|Win32
+		{B2CB20EC-72FA-49FC-9DC7-40ACFF63F836}.Release|Win32.ActiveCfg = Release|Win32
+		{B2CB20EC-72FA-49FC-9DC7-40ACFF63F836}.Release|Win32.Build.0 = Release|Win32
+		{B4AE99D0-74BD-458E-9B1C-7A5F39E84B3A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B4AE99D0-74BD-458E-9B1C-7A5F39E84B3A}.Debug|Win32.Build.0 = Debug|Win32
+		{B4AE99D0-74BD-458E-9B1C-7A5F39E84B3A}.Release|Win32.ActiveCfg = Release|Win32
+		{B4AE99D0-74BD-458E-9B1C-7A5F39E84B3A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		AMDCaProjectFile = H:\visualstudio\DataStorageManager\DataStorageManager\CodeAnalyst\DataStorageManager.caw
+	EndGlobalSection
+EndGlobal
