@@ -171,68 +171,84 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath=".\BitsetGenerator.cpp"
+			<Filter
+				Name="TestWAH"
 				>
-			</File>
-			<File
-				RelativePath=".\stdafx.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
+				<File
+					RelativePath=".\BitsetGenerator.cpp"
 					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
+				</File>
+				<File
+					RelativePath=".\stdafx.cpp"
 					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\TestWAHArray.cpp"
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="1"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="1"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\TestWAHArray.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WAHArray.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="WAHStructure"
 				>
-			</File>
-			<File
-				RelativePath=".\WAHArray.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\WAHStructure.cpp"
-				>
-			</File>
+				<File
+					RelativePath=".\WAHStructure.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\BitsetGenerator.h"
+			<Filter
+				Name="TestWAH"
 				>
-			</File>
-			<File
-				RelativePath=".\stdafx.h"
+				<File
+					RelativePath=".\BitsetGenerator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\stdafx.h"
+					>
+				</File>
+				<File
+					RelativePath=".\targetver.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TestWAHArray.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="WAHStructure"
 				>
-			</File>
-			<File
-				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TestWAHArray.h"
-				>
-			</File>
-			<File
-				RelativePath=".\WAHStructure.h"
-				>
-			</File>
+				<File
+					RelativePath=".\WAHStructure.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
