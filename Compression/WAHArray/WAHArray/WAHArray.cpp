@@ -7,31 +7,35 @@
 #include "TestWAHArray.h"
 #include <vector>
 #include <algorithm>
+#include <string>
 
 
 using namespace std;
 using namespace boost;
 using namespace boost::detail::dynamic_bitset_count_impl;
 using namespace  boost::detail;
+using namespace CompressionSchemes::TestStructure;
+using namespace CompressionSchemes;
 void randomBitStreamTester();
+
+
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	dynamic_bitset<> wer(100);
-	
-	
-	// 	dynamic_bitset<> bitset(32);
-	// 	bitset[1] = 1;
-	// 	WAHStructure ws;
-	// 	ws.compressWords(bitset);
-	// 	cout << ws.count() << endl;
-
-	/*TestWAHArray tws;
-	tws.testBitCount();*/
-	
+TestWAHArray test;
+BitsetGenerator bg1;
+//string str = "111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111";
+//dynamic_bitset<> bs1 =bg1.buildFromString(str);
+//string str2 = "010101010101010101010101010101010101010101010101010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010101010101010101010101010101";
+//dynamic_bitset<> bs2 =bg1.buildFromString(str2);
+//test.testAccuracy(bs1.flip(),bs2.flip());
+//test.testAccuracy(bs1,bs2,TestWAHArray::OR);
+ //	test.testLeftCompressedRightLiteral();
+	test.OperatorTest();
 	return 0;
 }
+
 
 void randomBitStreamTester()
 {
