@@ -27,5 +27,9 @@ public:
 	{
 		return name;
 	}
+	string toString()
+	{
+		return name;
+	}
 };
 #endif

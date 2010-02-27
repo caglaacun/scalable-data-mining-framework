@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="E:\boost_1_40\boost_1_40\lib\libboost_regex-vc90-mt-gd-1_40.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -197,7 +198,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\DataSourceId.h"
+					RelativePath=".\LeftBracket.h"
 					>
 				</File>
 				<File
@@ -205,7 +206,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Operand.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Or.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RightBracket.h"
 					>
 				</File>
 				<File
@@ -234,6 +243,14 @@
 				</File>
 				<File
 					RelativePath=".\Scanner.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Exceptions"
+				>
+				<File
+					RelativePath=".\ScannerException.h"
 					>
 				</File>
 			</Filter>
