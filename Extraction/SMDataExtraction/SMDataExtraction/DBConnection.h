@@ -1,5 +1,6 @@
 #include "stdhead.h"
 #include "DSNDriverInfo.h"
+#include "SMException.h"
 
 using namespace DSNInfo;
 

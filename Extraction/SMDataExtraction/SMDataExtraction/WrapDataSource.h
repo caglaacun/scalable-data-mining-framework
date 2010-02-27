@@ -11,7 +11,7 @@ using namespace DBQueryExecutionInfo;
 class WrapDataSource
 {
 public:
-	__declspec(dllexport) WrapDataSource(DBQueryExecution cExec);
+	__declspec(dllexport) WrapDataSource(DBQueryExecution cExec,int dataSourceID);
 	__declspec(dllexport) ~WrapDataSource(void);
 	__declspec(dllexport) int noOfRows();
 	__declspec(dllexport) int noOfAttributes();
@@ -21,7 +21,7 @@ public:
 	__declspec(dllexport) vector<EncodedAttributeInfo*> codedAttributes();
 	__declspec(dllexport) Tuple* DecodeTheTuple(int tupleID);
 	__declspec(dllexport) EncodedAttributeInfo* operator()(const int attID);
-	__declspec(dllexport) VBitStream* operator()(const int attID,const int bitStreamID);
+	__declspec(dllexport) BitStreamInfo* operator()(const int attID,const int bitStreamID);
 	void encodeIntAttributes(vector<PureIntAttInfo*> intAtts);
 	void encodeStringAttributes(vector<PureStringAttInfo*> stringAtts);
 	
@@ -33,5 +33,5 @@ private:
 	vector<EncodedMultiCatAttribute*> _codedStringAtts;
 	int _noOfRows;
 	int _noOfAttributes;
-
+	int _dataSourceID;
 };

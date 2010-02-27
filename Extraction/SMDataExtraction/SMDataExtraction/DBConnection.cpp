@@ -8,7 +8,12 @@ namespace DBConnectionInfo{
 		this->_DSN_Name = DSN_Name;
 		this->_DB_UID = DB_UID;
 		this->_DB_PWD = DB_PWD;
-		//this->_DB_Connection_String = *DSN_Name + ";" + *DB_UID + ";" + *DB_PWD;
+// 		this->_DB_Connection_String = "DSN = ";
+// 		this->_DB_Connection_String = strcpy(this->_DB_Connection_String,this->_DSN_Name);
+// 		this->_DB_Connection_String = strcat(this->_DB_Connection_String,"; UID = ");
+// 		this->_DB_Connection_String = strcat(this->_DB_Connection_String,this->_DB_UID);
+// 		this->_DB_Connection_String = strcat(this->_DB_Connection_String,"; PWD = ");
+// 		this->_DB_Connection_String = strcat(this->_DB_Connection_String,this->_DB_PWD);
 	}
 
 	DBConnectionInfo::DBConnection::DBConnection(char* DB_Connection_String){
@@ -16,7 +21,6 @@ namespace DBConnectionInfo{
 	}
 	
 	bool DBConnectionInfo::DBConnection::initiateConnectionToDB(){
-		//this->_dbConPtr= cCon;
 		try{
 			if (this->_DB_Connection_String == NULL)
 			{
@@ -30,7 +34,7 @@ namespace DBConnectionInfo{
 			
 			return true;
 		}
-		catch(std::exception &ex)
+		catch(CGOdbcEx &ex)
 		{
 			//TODO add logging method to record error condition.
 			return false;			
