@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="E:\boost_1_40\boost_1_40\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -170,18 +171,94 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\Main.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\DataExtraction.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Olap.h"
+				>
+			</File>
+			<Filter
+				Name="Symbols"
+				>
+				<File
+					RelativePath=".\And.h"
+					>
+				</File>
+				<File
+					RelativePath=".\DataSourceId.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Not.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Or.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Symbol.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Query"
+				>
+				<File
+					RelativePath=".\Expression.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Query.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Language"
+				>
+				<File
+					RelativePath=".\Parser.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scanner.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+		</Filter>
+		<Filter
+			Name="Tests"
+			>
+			<File
+				RelativePath=".\ExpressionTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ScannerTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SymbolTest.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
