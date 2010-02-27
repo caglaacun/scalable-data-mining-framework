@@ -12,16 +12,15 @@ void main()
 {
 	Symbol* s=new And("and");
 	Expression ex(s);
-	cout<<ex.removeSymbolFromExpressionFront()->getName()<<endl;
 
 
 	
 	Symbol * s1=new Or("or");
 	ex.addSymbolToExpression(s1);
 	ex.addSymbolToExpression(s1);
-	cout<<ex.symbolCount()<<endl;
+	ex.print();
 	
 
 	system("pause");
-}
-*/
+}*/
+

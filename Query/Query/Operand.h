@@ -1,30 +1,31 @@
-#ifndef ID
-#define ID
+#ifndef OPERAND
+#define OPERAND
 
 #include <iostream>
+#include <sstream>
 
 #include "Symbol.h"
 
 using namespace std;
 
-class DataSourceId:public Symbol
+class Operand:public Symbol
 {
 private:
 	size_t attributeIndex;
 	size_t bitStringIndex;
 public:
-	DataSourceId()
+	Operand()
 	{
 
 	}
-	DataSourceId(string name,size_t attributeIndex,size_t bitStringIndex)
+	Operand(string name,size_t attributeIndex,size_t bitStringIndex)
 	{
 		this->name=name;
 		this->attributeIndex=attributeIndex;
 		this->bitStringIndex=bitStringIndex;
-		this->type=TYPEDATASOURCEID;
+		this->type=TYPEOPERAND;
 	}
-	~DataSourceId()
+	~Operand()
 	{
 
 	}
@@ -39,6 +40,14 @@ public:
 	size_t getbitStringIndex()
 	{
 		return bitStringIndex;
+	}
+	string toString()
+	{
+		stringstream atind;
+		atind << attributeIndex;
+		stringstream bits;
+		bits << bitStringIndex;
+		return name+" "+atind.str()+" "+bits.str();
 	}
 };
 #endif

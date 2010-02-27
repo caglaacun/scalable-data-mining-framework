@@ -1,5 +1,5 @@
-#ifndef NOT
-#define NOT
+#ifndef LEFTBRACKET
+#define LEFTBRACKET
 
 #include <iostream>
 
@@ -7,19 +7,19 @@
 
 using namespace std;
 
-class Not:public Symbol
+class LeftBracket:public Symbol
 {
 public:
-	Not()
+	LeftBracket()
 	{
 
 	}
-	Not(string name)
+	LeftBracket(string name)
 	{
 		this->name=name;
-		this->type=TYPENOT;
+		this->type=TYPELEFTBRACKET;
 	}
-	~Not()
+	~LeftBracket()
 	{
 
 	}
