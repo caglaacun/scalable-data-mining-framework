@@ -31,10 +31,10 @@ void EncodedMultiCatAttribute::mapStringDataToCategories(string* _valueList,vect
 	MultiCatDataInfo *df = new MultiCatDataInfo(_uniqueValList);
 	this->_mappedIntVals = df->getAssignedEncodedNumberList();
 	
-	for (int j = 0 ; j < this->NoOfVBitStreams() ; j++)
-	{
-		this->vBitStreams()[j] = new VBitStream(noOfRows);
-	}
+// 	for (int j = 0 ; j < this->NoOfVBitStreams() ; j++)
+// 	{
+// 		this->vBitStreams()[j] = new VBitStream(noOfRows);
+// 	}
 
 	for (int i = 0 ; i < noOfRows ; i++)
 	{
@@ -54,14 +54,16 @@ vector<string> EncodedMultiCatAttribute::uniqueValList(){
 }
 
 string EncodedMultiCatAttribute::decodeTheTuple(int tupleID){
-	int i = 0;
-	bool* bitSet = new bool[this->NoOfVBitStreams()];
+
+	dynamic_bitset<> temp(this->NoOfVBitStreams());
 	int val=0;
-	for (; i<this->NoOfVBitStreams() ; i++)
+
+	for (int i=0 ; i < this->NoOfVBitStreams() ;i++)
 	{
-		bitSet[i] = this->vBitStreams()[i]->BitStream()[tupleID - 1];
-		if(bitSet[i]) {val += pow(2.0,(double)(this->NoOfVBitStreams() - i - 1));}
+		temp[i] = this->vBitStreams()[i]->getProcessedBitStream()[tupleID - 1];
 	}
+
+	val = (int)temp.to_ulong();
 	
 	return this->_uniqueValList[val];
 }

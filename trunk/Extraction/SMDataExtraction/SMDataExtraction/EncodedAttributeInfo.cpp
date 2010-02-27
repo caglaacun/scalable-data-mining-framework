@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EncodedAttributeInfo.h"
+#include "BitStreamInfo.h"
 
 EncodedAttributeInfo::EncodedAttributeInfo(){
 
@@ -9,7 +10,7 @@ EncodedAttributeInfo::~EncodedAttributeInfo(){
 
 }
 
-vector<VBitStream*> EncodedAttributeInfo::vBitStreams(){
+vector<BitStreamInfo*> EncodedAttributeInfo::vBitStreams(){
 	return this->_vBitStreams;
 }
 
@@ -29,11 +30,11 @@ int EncodedAttributeInfo::NoOfVBitStreams(){
 	return this->_noOfVBitStreams;
 }
 
-VBitStream* EncodedAttributeInfo::bitStreamAt(int bitStreamID){
+BitStreamInfo* EncodedAttributeInfo::bitStreamAt(int bitStreamID){
 	return this->_vBitStreams[bitStreamID];
 }
 
-VBitStream* EncodedAttributeInfo::operator ()(const int bitStreamID){
+BitStreamInfo* EncodedAttributeInfo::operator ()(const int bitStreamID){
 	return this->bitStreamAt(bitStreamID);
 }
 
@@ -62,4 +63,8 @@ void EncodedAttributeInfo::setNoOfVBitStreams(int novBitsets, int rows){
 	{
 		this->_vBitStreams[i] = new VBitStream(rows);
 	}
+}
+
+void EncodedAttributeInfo::setVBitStreams(std::vector<BitStreamInfo*> vBitset){
+	this->_vBitStreams = vBitset;
 }

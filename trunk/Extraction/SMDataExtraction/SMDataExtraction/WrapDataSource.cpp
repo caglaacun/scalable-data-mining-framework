@@ -11,11 +11,12 @@
 using namespace std;
 using namespace boost;
 
-WrapDataSource::WrapDataSource(DBQueryExecution cExec)
+WrapDataSource::WrapDataSource(DBQueryExecution cExec,int dataSourceID)
 {
 	this->_queryDataInfo = cExec;
 	this->_noOfAttributes = cExec.RetievedIntData().size() + cExec.RetrievedDoubleData().size() + cExec.RetrievedStringData().size();
 	this->_noOfRows = cExec.RowCount();
+	this->_dataSourceID = dataSourceID;
 }
 
 WrapDataSource::~WrapDataSource(void)
@@ -55,22 +56,26 @@ void WrapDataSource::encodeIntAttributes(vector<PureIntAttInfo*> intAtts){
 		vector<dynamic_bitset<>> convertedBitSet;
 		for (; j < this->_noOfRows ; j++)
 		{
-			dynamic_bitset<> bitSet(encodedIntAtt->NoOfVBitStreams(),(unsigned long)values[j]);
+			dynamic_bitset<> bitSet(encodedIntAtt->NoOfVBitStreams(),(unsigned long)abs(values[j]));
 			convertedBitSet.push_back(bitSet);
 		}
 		encodedIntAtt->setVBitStreamSize(encodedIntAtt->NoOfVBitStreams());
 		for(int l = 0 ; l < convertedBitSet.size() ; l++)
 		{
-			for (int k = (encodedIntAtt->NoOfVBitStreams() - 1) ; k >= 0  ; k--)
+			for (int k = 0 ; k < encodedIntAtt->NoOfVBitStreams()  ; k++)
 			{
 				bool val = convertedBitSet[l][k];
-				encodedIntAtt->vBitStreams()[encodedIntAtt->NoOfVBitStreams() - k - 1]->setBitStreamAllocAttID(pureIntAtt->attID);
-				encodedIntAtt->vBitStreams()[encodedIntAtt->NoOfVBitStreams() - k - 1]->setBitStreamAggregation(encodedIntAtt->attributeName());
-				encodedIntAtt->vBitStreams()[encodedIntAtt->NoOfVBitStreams() - k - 1]->setBitValue(l,val);
+				encodedIntAtt->vBitStreams()[k]->setBitStreamAllocAttID(pureIntAtt->attID);
+				encodedIntAtt->vBitStreams()[k]->setBitStreamAllocAttName(encodedIntAtt->attributeName());
+				encodedIntAtt->vBitStreams()[k]->setBitValue(l,val);
 			}
 		}
 		this->_codedIntAtts.push_back(encodedIntAtt);
-		this->_codedAtts.insert(this->_codedAtts.begin(),encodedIntAtt->attributeID(),encodedIntAtt);
+		if (encodedIntAtt->attributeID() == 0)
+		{
+			this->_codedAtts.insert(this->_codedAtts.begin(),encodedIntAtt);
+		}
+		else this->_codedAtts.insert(this->_codedAtts.begin(),encodedIntAtt->attributeID(),encodedIntAtt);
 	}
 }
 
@@ -87,16 +92,21 @@ void WrapDataSource::encodeStringAttributes(vector<PureStringAttInfo*> stringAtt
 
 		for (int j = 0 ; j < multiCatAtt->mappedValList().size() ; j++)
 		{
-			for (int k = (multiCatAtt->NoOfVBitStreams() - 1) ; k >= 0  ; k--)
+			for (int k = 0 ; k < multiCatAtt->NoOfVBitStreams()  ; k++)
 			{
 				bool val = multiCatAtt->mappedValList()[j][k];
-				multiCatAtt->vBitStreams()[multiCatAtt->NoOfVBitStreams() - k - 1]->setBitStreamAllocAttID(stringAtt->attID);
-				multiCatAtt->vBitStreams()[multiCatAtt->NoOfVBitStreams() - k - 1]->setBitStreamAggregation(stringAtt->attName);
-				multiCatAtt->vBitStreams()[multiCatAtt->NoOfVBitStreams() - k - 1]->setBitValue(j,val);
+				multiCatAtt->vBitStreams()[k]->setBitStreamAllocAttID(stringAtt->attID);
+				multiCatAtt->vBitStreams()[k]->setBitStreamAllocAttName(stringAtt->attName);
+				multiCatAtt->vBitStreams()[k]->setBitValue(j,val);
 			}
 		}
 		this->_codedStringAtts.push_back(multiCatAtt);
-		this->_codedAtts.insert(this->_codedAtts.begin(),multiCatAtt->attributeID(),multiCatAtt);
+
+		if (multiCatAtt->attributeID() == 0)
+		{
+			this->_codedAtts.insert(this->_codedAtts.begin(),multiCatAtt);
+		}
+		else this->_codedAtts.insert(this->_codedAtts.begin(),multiCatAtt->attributeID(),multiCatAtt);
 	}
 }
 
@@ -128,6 +138,7 @@ Tuple* WrapDataSource::DecodeTheTuple(int tupleID){
 		intAtt->attName = this->_codedIntAtts[i]->attributeName();
 		intAtt->type =  this->_codedIntAtts[i]->attributeType();
 
+		intTuples.push_back(intAtt);
 	}
 
 	for (int j=0 ; j < this->_codedStringAtts.size() ; j++)
@@ -158,6 +169,6 @@ EncodedAttributeInfo* WrapDataSource::operator ()(const int attID){
 	return this->_codedAtts[attID];
 }
 
-VBitStream* WrapDataSource::operator ()(const int attID, const int BitStreamID){
+BitStreamInfo* WrapDataSource::operator ()(const int attID, const int BitStreamID){
 	return (*(this->_codedAtts[attID]))(BitStreamID);
 }

@@ -232,6 +232,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\BitStreamInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\DataSources.h"
+					>
+				</File>
+				<File
 					RelativePath=".\EncodedAttributeInfo.h"
 					>
 				</File>
@@ -253,6 +261,14 @@
 				</File>
 				<File
 					RelativePath=".\WrapDataSource.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Exception"
+				>
+				<File
+					RelativePath=".\SMException.h"
 					>
 				</File>
 			</Filter>
@@ -289,10 +305,6 @@
 						CompileAsManaged="0"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\SMDataExtraction.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp"
@@ -358,6 +370,14 @@
 				Name="EncodedDataInfoSource"
 				>
 				<File
+					RelativePath=".\BitStreamInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DataSources.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\EncodedAttributeInfo.cpp"
 					>
 				</File>
@@ -379,6 +399,14 @@
 				</File>
 				<File
 					RelativePath=".\WrapDataSource.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Exception"
+				>
+				<File
+					RelativePath=".\SMException.cpp"
 					>
 				</File>
 			</Filter>

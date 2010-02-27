@@ -7,6 +7,7 @@
 #include "WrapDataSource.h"
 #include "DecodedTuple.h"
 #include "EncodedAttributeInfo.h"
+#include "DataSources.h"
 #include <iostream>
 
 using namespace std;
@@ -23,7 +24,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	
 	//Testing the Library for executing query statements and binding data.
-	const char* statement="select TOP(20) BusinessType,GeographyKey,ProductLine from DimReseller";
+	const char* statement="select TOP(5) GeographyKey,BusinessType from DimReseller";
 	DBQueryExecution cExec(statement);
 	if ((cExec.ExecuteQueryAndBindData(cCon.DBConnectionPtr())))
 	{
@@ -78,15 +79,20 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 
-	WrapDataSource *ds = new WrapDataSource(cExec);
+	DataSources * dss= new DataSources();	
+	WrapDataSource *ds = new WrapDataSource(cExec,0);
+	dss->insertDataSources(ds);
 	ds->encodeAtrributes();
+	//BitStreamInfo* te = (*dss)(0,0,0);
+
+
 	//Testing whether a particular attribute can be retrieved given the attribute ID.
-	EncodedAttributeInfo* att = (*ds)(1);
+	EncodedAttributeInfo* att = (*ds)(0);
 
 	//Testing whether a particular vBitStream can be retrieved given the bitStream ID;
 	//In fact there are two ways in doing so which is explaining in the below illustration.
-	VBitStream* bit_1 = (*ds)(1,0);
-	VBitStream* bit_2 = (*att)(0);
+	BitStreamInfo* bit_1 = (*ds)(0,0);
+	BitStreamInfo* bit_2 = (*att)(0);
 
 	for (int i = 0 ; i < ds->codedAttributes().size() ; i++)
 	{
@@ -101,25 +107,19 @@ int _tmain(int argc, _TCHAR* argv[])
 				cout<<intAtt->attributeID()<<endl;
 				for (int j = 0; j < intAtt->NoOfVBitStreams() ; j++)
 				{
-					cout<<"Attribute ID: "<<intAtt->vBitStreams()[j]->bitStreamAllocAttID()<<" ";
-					for (int k = 0 ; k < ds->noOfRows() ; k++)
-					{
-						cout<<intAtt->vBitStreams()[j]->BitStream()[k];
-					}
+					cout<<"Attribute ID: "<<intAtt->vBitStreams()[j]->BitStreamAllocAttID()<<" ";
+					cout<<intAtt->vBitStreams()[j]->getProcessedBitStream();
 					cout<<endl;
 				}
 
 				//Testing the method for retrieving a bit stream on given index.
 				//VBitStream* vBitStream = intAtt->bitStreamAt(2);
 
-				VBitStream* vBitStream = (*intAtt)(1);
-				for (int j=0 ; j<ds->noOfRows() ; j++)
-				{
-					cout<<vBitStream->BitStream()[j];
-				}
+				BitStreamInfo* vBitStream = (*intAtt)(1);
+				cout << vBitStream->getProcessedBitStream()<<endl;
 
 				//Decode a particular tuple upon given a tuple ID.
-				cout<<endl<<intAtt->decodeTheTuple(20)<<endl;;
+				cout<<intAtt->decodeTheTuple(5)<<endl;;
 				break;
 			}
 
@@ -137,11 +137,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 				for (int k = 0 ; k < multiCatAtt->NoOfVBitStreams() ; k++)
 				{
-					cout<<"Attribute ID: "<<multiCatAtt->vBitStreams()[k]->bitStreamAllocAttID()<<" ";
-					for (int l=0 ; l < ds->noOfRows() ; l++)
-					{
-						cout<<multiCatAtt->vBitStreams()[k]->BitStream()[l];
-					}
+					cout<<"Attribute ID: "<<multiCatAtt->vBitStreams()[k]->BitStreamAllocAttID()<<" ";
+					cout<<multiCatAtt->vBitStreams()[k]->getProcessedBitStream();
 					cout<<endl;
 				}
 
@@ -149,33 +146,38 @@ int _tmain(int argc, _TCHAR* argv[])
 				//For convenience the same duty can be achieved by using parenthesis operator
 				// eg: multicat(2)
 				//VBitStream* vBitStream = multiCatAtt.bitStreamAt(1);
-				VBitStream* vBitStream = (*multiCatAtt)(1);
-				for (int j=0 ; j<ds->noOfRows() ; j++)
-				{
-					cout<<vBitStream->BitStream()[j];
-				}
+				BitStreamInfo* vBitStream = (*multiCatAtt)(1);
+				cout<<vBitStream->getProcessedBitStream()<<endl;
 
 				//Decode a particular tuple upon given a tuple ID.
-				cout<<endl<<multiCatAtt->decodeTheTuple(5)<<endl;;
+				cout<<multiCatAtt->decodeTheTuple(5)<<endl;;
 				break;
 			}
 		}
 	}
+	//Testing the location of 1's
+	cout<<"No of 1's in the bit stream 0 : "<<bit_1->count()<<endl;
+
+	//Testing the places of 1's
+	for (int j=0 ; j<bit_1->getActiveBitIDs().size() ; j++)
+	{
+		cout<<bit_1->getActiveBitIDs()[j]<<" ";
+	}
+	cout<<endl;
+
 	
-
-
 	//Testing the decoding an entire tuple ability.
 	int tupID = 3;
 	Tuple* tuples = ds->DecodeTheTuple(tupID);
-	cout<<"\n Decoding the Tuple ID: " << tupID<<endl;
+	cout<<"\nDecoding the Tuple ID: " << tupID<<endl;
 	for (int i=0 ; i<tuples->decodedInts().size() ; i++)
 	{
-		cout << "AttributeID : " << tuples->decodedInts()[i]->attID << " - "<<tuples->decodedInts()[i]->ValueList()[0]<<endl;
+		cout << "AttributeID : " << tuples->decodedInts()[i]->attID << " - value : "<<tuples->decodedInts()[i]->ValueList()[0]<<endl;
 	}
 
 	for (int j=0 ; j<tuples->decodedStringAtts().size() ; j++)
 	{
-		cout << "AttributeID : " << tuples->decodedStringAtts()[j]->attID << " - "<<tuples->decodedStringAtts()[j]->ValueList()[0]<<endl;
+		cout << "AttributeID : " << tuples->decodedStringAtts()[j]->attID << " - value : "<<tuples->decodedStringAtts()[j]->ValueList()[0]<<endl;
 	}
 	
 	//Testing the closing connection method.
@@ -183,7 +185,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		cout<<endl<<"Connection to the database is terminated successfully."<<endl;
 	}
+	
 	return 0;
-
 }
-
