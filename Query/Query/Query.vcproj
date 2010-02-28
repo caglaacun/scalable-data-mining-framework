@@ -238,6 +238,10 @@
 				Name="Language"
 				>
 				<File
+					RelativePath=".\InfixToPostfix.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Parser.h"
 					>
 				</File>
@@ -265,15 +269,27 @@
 			Name="Tests"
 			>
 			<File
-				RelativePath=".\ExpressionTest.cpp"
+				RelativePath=".\example-QueryAPI.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ScannerTest.cpp"
+				RelativePath=".\TestExpression.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SymbolTest.cpp"
+				RelativePath=".\TestInfixToPostfix.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TestQuery.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TestScanner.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TestSymbol.cpp"
 				>
 			</File>
 		</Filter>

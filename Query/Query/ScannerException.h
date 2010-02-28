@@ -10,7 +10,7 @@ class OperandSyntaxException: public exception
 {
 	virtual const char* what() const throw()
 	{
-		return "Error in operand syntax: use operands such as id[1,2] etc...";
+		return "Error in operand syntax: use operands such as id[1,2]";
 	}
 }operandSyntaxException; 
 
