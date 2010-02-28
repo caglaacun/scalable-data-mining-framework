@@ -20,7 +20,7 @@ using namespace std;
 class Scanner
 {
 private:
-	Expression tokens;
+	Expression* tokens;
 	string operand;
 
 	void cleanOperand()
@@ -42,7 +42,7 @@ private:
 			//cout<<dataSourceID<<endl; 
 			//cout<<attributeIndex<<endl; 
 			//cout<<bitStringIndex<<endl; 
-			tokens.addSymbolToExpression(new Operand(dataSourceID,attributeIndex,bitStringIndex));
+			tokens->addSymbolToExpression(new Operand(dataSourceID,attributeIndex,bitStringIndex));
 			//cout<<operand<<endl;
 			cleanOperand();
 		}
@@ -68,6 +68,7 @@ public:
 	}
 	Expression* scan(string str)
 	{
+		tokens = new Expression();
 		for (int i=0;i<str.size();i++)
 		{
 			char character = str[i];
@@ -84,31 +85,31 @@ public:
 			{
 				//cout<<character<<endl;
 				addOperand(operand);
-				tokens.addSymbolToExpression(new And("&_token"));
+				tokens->addSymbolToExpression(new And("&_token"));
 			}
 			else if (character == '|')
 			{
 				//cout<<character<<endl;
 				addOperand(operand);
-				tokens.addSymbolToExpression(new Or("|_token"));
+				tokens->addSymbolToExpression(new Or("|_token"));
 			}
 			else if (character == '!')
 			{
 				//cout<<character<<endl;
 				addOperand(operand);
-				tokens.addSymbolToExpression(new Not("!_token"));
+				tokens->addSymbolToExpression(new Not("!_token"));
 			}
 			else if (character == '(')
 			{
 				//cout<<character<<endl;
 				addOperand(operand);
-				tokens.addSymbolToExpression(new LeftBracket("(_token"));
+				tokens->addSymbolToExpression(new LeftBracket("(_token"));
 			}
 			else if (character == ')')
 			{
 				//cout<<character<<endl;
 				addOperand(operand);
-				tokens.addSymbolToExpression(new RightBracket(")_token"));
+				tokens->addSymbolToExpression(new RightBracket(")_token"));
 			}
 			else
 			{
@@ -116,12 +117,12 @@ public:
 			}
 		}
 		addOperand(operand);
-		return &tokens;
+		return tokens;
 	}
 
 	void print()
 	{
-		tokens.print();
+		tokens->print();
 	}
 };
 #endif

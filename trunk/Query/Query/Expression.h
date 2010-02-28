@@ -26,7 +26,7 @@ public:
 
 	~Expression()
 	{
-
+		//cout<<"delete"<<endl;
 	}
 
 	void addSymbolToExpression(Symbol* symbol)
@@ -39,7 +39,7 @@ public:
 		return expression[position];
 	}
 
-	size_t symbolCount(){
+	size_t count(){
 		return expression.size();
 	}
 

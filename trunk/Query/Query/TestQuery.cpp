@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <string>
 #include <exception>
@@ -7,22 +8,22 @@
 #include "And.h"
 #include "Or.h"
 #include "Scanner.h"
+#include "Query.h"
 
 using namespace std;
 
 void main()
 {
-	Scanner s;
 	try
 	{
-		Expression* tokens = s.scan("(id[2,333])&!id[3,2]");
+		Query q("id[1,2]");
+		//q.getPostfixExpression()->print();
 	}
-	catch (exception& e)
+	catch(exception& e)
 	{
-		cout << e.what() << endl;
+		cout<<e.what()<<endl;
 	}
-	
-	s.print();
 
 	system("pause");
 }
+*/

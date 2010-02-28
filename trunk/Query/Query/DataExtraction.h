@@ -1,10 +1,12 @@
+#ifndef DATAEX
+#define DATAEX
+
 #include <iostream>
 #include <boost/dynamic_bitset.hpp>
 
 using namespace std;
-using namespace boost;
 
-typedef dynamic_bitset<> bitstring;
+typedef boost::dynamic_bitset<> bitstring;
 
 class DataExtraction
 {
@@ -20,3 +22,4 @@ public:
 private:
 	vector<bitstring> data;
 };
+#endif
