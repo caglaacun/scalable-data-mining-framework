@@ -12,9 +12,9 @@ void main()
 {
 	try
 	{
-		Query* q=new Query("id[1,2]");
+		Query* q=new Query("!id[1,2]&!id[1,2]");
 		Olap olap;
-		cout<<olap.count(q)<<endl;
+		cout<<"count:"<<olap.count(q)<<endl;
 	}
 	catch(exception& e)
 	{
