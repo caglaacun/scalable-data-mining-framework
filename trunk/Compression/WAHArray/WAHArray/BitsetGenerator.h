@@ -5,7 +5,7 @@
 
 using namespace std;
 using namespace  boost;
-namespace CompressionSchemes{
+namespace CompressedStructure{
 	namespace TestStructure{
 		class BitsetGenerator
 		{
@@ -13,9 +13,9 @@ namespace CompressionSchemes{
 			BitsetGenerator(void);
 			~BitsetGenerator(void);
 			dynamic_bitset<> getPureBitset(int length,bool bitType);
-			dynamic_bitset<> getMiddleCompressedBitset(int length,int compressedStart,int span,bool compressedType);
+			dynamic_bitset<> getMiddleCompressedBitset(size_t length,size_t compressedStart,size_t span,bool compressedType);
 			dynamic_bitset<> getAlternatingBitset(int length);
-			dynamic_bitset<> getMiddleAlternatingBitset(int length,int alternatingStart,int span,bool nonAlternatingPart);
+			dynamic_bitset<> getMiddleAlternatingBitset(size_t length,size_t alternatingStart,size_t span,bool nonAlternatingPart);
 			vector<int> getOneBitPositions(int length, int onePercent);
 			dynamic_bitset<> getRandomBitStream(int length,int onePercent);
 			dynamic_bitset<> buildFromString(string & str);

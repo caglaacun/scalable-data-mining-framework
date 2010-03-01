@@ -5,40 +5,40 @@
 
 using namespace std;
 using namespace  boost;
-namespace CompressionSchemes{
+namespace CompressedStructure{
 	class WAHStructure
 	{
-		
+
 	public:
-		
+
 		WAHStructure(void);	
 		~WAHStructure(void);	
-		void compressWords(boost::dynamic_bitset<>& bitMap);
-		void printVector();
-		void setCompressedStream(vector<unsigned long int> &x);	
-		void printArray();	
+		void CompressWords(boost::dynamic_bitset<>& _bit_map);
+		void PrintCompressedStream();
+		void SetCompressedStream(vector<unsigned long int> &_compressed_vector);			
 		void printCompressedStream();
-		vector<unsigned long int>& getCompressedVector();
-		dynamic_bitset<> decompress();
-		void flip();
-		WAHStructure * operator~();
-		int getMainArrayLength();
-
-		WAHStructure * operator & (WAHStructure&);
-		WAHStructure * operator |(WAHStructure & structure);
-		//WAHStructure * WAHStructure::operator | (WAHStructure&);
-		boost::dynamic_bitset<> getCompressedWord();
-		int getValue(boost::dynamic_bitset<> & bitMap,int startIndex,int offset);
+		vector<unsigned long int>& GetCompressedVector();
+		dynamic_bitset<> Decompress();				
+		unsigned long int GetOriginalStreamLength();
 		int getSpaceUtilisation();
+		// Overloaded operators
+
+		WAHStructure * operator~();
+		WAHStructure * operator & (WAHStructure&);
+		WAHStructure * operator |(WAHStructure & _structure);
+		//WAHStructure * WAHStructure::operator | (WAHStructure&);		
+		
 
 		//Public Getters and setters
-		const short int ActiveWordSize() { return activeWordSize; }
-		void ActiveWordSize(short int val) { activeWordSize = val; }
-		unsigned long int ActiveWord() const { return activeWord; }
-		void ActiveWord(unsigned long int val) { activeWord = val; }
-		int MainArraySize() const { return mainArraySize; }
-		unsigned long long count();
-		void MainArraySize(int val) { mainArraySize = val; }
+		const unsigned long int ActiveWordSize() const { return m_iActiveWordSize; }
+		void ActiveWordSize(unsigned long int val) { m_iActiveWordSize = val; }
+		unsigned long int ActiveWord() const { return m_ulActiveWord; }
+		void ActiveWord(unsigned long int val) { m_ulActiveWord = val; }
+		int OriginalStreamSize() const { return m_iOriginalStreamSize; }
+		void OriginalStreamSize(unsigned long int val) { m_iOriginalStreamSize = val; }
+		unsigned long long Count();
+		
+
 		static const unsigned long int ZERO_LITERAL = 0;
 		static const unsigned long int ONE_LITERAL = 2147483647;
 		static const unsigned long int ONE_GAP_START_FLAG = 3221225472;
@@ -51,31 +51,27 @@ namespace CompressionSchemes{
 
 
 	private:
-		
-		enum longer_operand{ONE_GAP,ZERO_GAP};
-		void buildArray(boost::dynamic_bitset<>& bitMap);
-		dynamic_bitset<> convertVectorToBitmap(vector<unsigned long int> &decompressedVector);
-		vector<unsigned long int> expandCompressedVector(vector<unsigned long int>& compressedVector);
-		vector<int> alignRightWithLeft(int leftOpEndPos,int rightOpIndex,int rightOpEndPos,vector<unsigned long int> &rightOperand,vector<unsigned long int> &resultVector,longer_operand longer,operation_type type,bool gapState);	
-		vector<int> alignLeftWithRight(int rightOpEndPos,int leftOpIndex,int leftOpEndPos,vector<unsigned long int> &leftoperand,vector<unsigned long int> &resultVector, longer_operand longer,operation_type type ,bool gapExtensionState);	
-		void setOneCount(unsigned long int count,vector<unsigned long int> & compressed);
-		void setZeroCount(unsigned long int count,vector<unsigned long int> & compressed);
-		void setLiteral(unsigned long int literalVal,vector<unsigned long int> & compressed);
-		void copyIntegerToBitMap(dynamic_bitset<> &bitmap,int index);
-		int getStartBitValue(unsigned long int word);	
-		void setValueOnCompressedWord(unsigned long int word, vector<unsigned long	int> &compressedResult);	
-		unsigned long int incrementZeroWord(unsigned long int amount,unsigned long int word, vector<unsigned long int> &compressVector);
-		vector<unsigned long int> compressedStreamVector;
-		boost::dynamic_bitset<>  compressedStream;
-		unsigned long int getLiteralCount(unsigned long int &bitLiteral);
-		unsigned long int getGapCount(unsigned long int bitGap);
-		
 
-		int * mainArray;
-		int mainArraySize;	
-		//int count;
-		unsigned long int activeWord;	
-		short int activeWordSize;	
+		enum longer_operand{ONE_GAP,ZERO_GAP};
+		void BuildArray(boost::dynamic_bitset<>& _bitmap);
+		dynamic_bitset<> ConvertVectorToBitmap(vector<unsigned long int> &_decompressed_vector);
+		vector<unsigned long int> ExpandCompressedVector(vector<unsigned long int>& _compressed_vector);
+		vector<int> AlignRightWithLeft(int _left_op_end_pos,int _right_op_index,int _right_op_end_pos,vector<unsigned long int> &_right_operand,vector<unsigned long int> &_result_vector,longer_operand _longer,operation_type _type,bool _gap_state);	
+		vector<int> AlignLeftWithRight(int _right_op_end_pos,int _left_op_index,int _left_op_end_pos,vector<unsigned long int> &_left_operand,vector<unsigned long int> &_result_vector, longer_operand _longer,operation_type _type ,bool _gap_extension_state);	
+		void SetOneCount(unsigned long int _count,vector<unsigned long int> & _compressed);
+		void SetZeroCount(unsigned long int _count,vector<unsigned long int> & _compressed);
+		void SetLiteral(unsigned long int _literal_val,vector<unsigned long int> & _compressed);
+		void CopyIntegerToBitMap(dynamic_bitset<> &_bitmap,size_t _index);
+		int GetStartBitValue(size_t _word);	
+		void SetValueOnCompressedWord(unsigned long int _word, vector<unsigned long int> &_compressed_result);			
+		unsigned long int GetLiteralCount(unsigned long int &_bit_literal);
+	
+
+		vector<unsigned long int> m_compressed_stream;	
+		int * m_iMainArray;
+		unsigned long int m_iOriginalStreamSize;			
+		unsigned long int m_ulActiveWord;	
+		unsigned long int m_iActiveWordSize;	
 		static const int WORD_SIZE = 32;		
 
 	};

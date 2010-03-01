@@ -8,14 +8,15 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include "TimeTest.h"
 
 
 using namespace std;
 using namespace boost;
 using namespace boost::detail::dynamic_bitset_count_impl;
 using namespace  boost::detail;
-using namespace CompressionSchemes::TestStructure;
-using namespace CompressionSchemes;
+using namespace CompressedStructure::TestStructure;
+using namespace CompressedStructure;
 void randomBitStreamTester();
 
 
@@ -24,16 +25,9 @@ void randomBitStreamTester();
 int _tmain(int argc, _TCHAR* argv[])
 {
 TestWAHArray test;
-BitsetGenerator bg1;
-//string str = "111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111";
-//dynamic_bitset<> bs1 =bg1.buildFromString(str);
-//string str2 = "010101010101010101010101010101010101010101010101010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010101010101010101010101010101";
-//dynamic_bitset<> bs2 =bg1.buildFromString(str2);
-//test.testAccuracy(bs1.flip(),bs2.flip());
-//test.testAccuracy(bs1,bs2,TestWAHArray::OR);
- //	test.testLeftCompressedRightLiteral();
-	test.OperatorTest();
-	return 0;
+test.OperatorTest();
+
+return 0;
 }
 
 

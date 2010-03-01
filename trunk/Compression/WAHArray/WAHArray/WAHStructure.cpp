@@ -3,60 +3,64 @@
 #include "Math.h"
 #include <iostream>
 using namespace std;
-namespace CompressionSchemes{
+namespace CompressedStructure{
 	WAHStructure::WAHStructure(void)
 	{
+		m_iActiveWordSize = 0;
+		m_iMainArray = NULL;
+		m_iOriginalStreamSize = 0;
+		m_ulActiveWord = 0;
 	}
 	WAHStructure::~WAHStructure(void)
 	{
 	}
-	void WAHStructure::buildArray(boost::dynamic_bitset<>& bitMap)
+	void WAHStructure::BuildArray(boost::dynamic_bitset<>& _bit_map)
 	{
 		//count = bitMap.count();
-		mainArraySize = floor(((float)bitMap.size()/(float)(WORD_SIZE-1)));
-		mainArray = new int[mainArraySize];
-		activeWordSize = bitMap.size() - mainArraySize * (WORD_SIZE-1);
+		m_iOriginalStreamSize = (int)floor(((float)_bit_map.size()/(float)(WORD_SIZE-1)));
+		m_iMainArray = new int[m_iOriginalStreamSize];
+		m_iActiveWordSize = _bit_map.size() - m_iOriginalStreamSize * (WORD_SIZE-1);
 
-		if (activeWordSize > 0)
+		if (m_iActiveWordSize > 0)
 		{
-			boost::dynamic_bitset<> activeWordBitSet (activeWordSize);		
+			boost::dynamic_bitset<> active_word_bit_set (m_iActiveWordSize);		
 			int k=0;
-			for (int i = bitMap.size()-activeWordSize; i < bitMap.size() ; i++)
+			for (size_t i = _bit_map.size()-m_iActiveWordSize; i < _bit_map.size() ; i++)
 			{
-				activeWordBitSet[k++] = bitMap[i];
+				active_word_bit_set[k++] = _bit_map[i];
 			}		
-			bitMap.resize(mainArraySize*(WORD_SIZE-1));
-			activeWord = activeWordBitSet.to_ulong();
+			_bit_map.resize(m_iOriginalStreamSize*(WORD_SIZE-1));
+			m_ulActiveWord = active_word_bit_set.to_ulong();
 		}
 		boost::dynamic_bitset<> temp(32);
-		int mainArrayIndex= 0;
+		int main_array_index= 0;
 		int counter = 0;
-		for (int i = 0; i < bitMap.size() ;)
+		for (size_t i = 0; i < _bit_map.size() ;)
 		{		
 			for (int j=0; j < WORD_SIZE-1; j++)
 			{
-				temp[j]= bitMap[i];	
+				temp[j]= _bit_map[i];	
 
 				i++;
 			}
 
-			mainArray[mainArrayIndex++] = temp.to_ulong();		
+			m_iMainArray[main_array_index++] = temp.to_ulong();		
 		}
 	}
-	unsigned long long WAHStructure::count()
+	unsigned long long WAHStructure::Count()
 	{
-		vector<unsigned long int>::iterator value_iterator = compressedStreamVector.begin();
-		unsigned long long countVal = 0;
-		while(value_iterator != compressedStreamVector.end())
+		vector<unsigned long int>::iterator value_iterator = m_compressed_stream.begin();
+		unsigned long long count_val = 0;
+		while(value_iterator != m_compressed_stream.end())
 		{
 			unsigned long int temp_value = *(value_iterator);
-			int startBit = getStartBitValue(temp_value);
-			if (LITERAL_WORD == startBit)
+			int start_bit = GetStartBitValue(temp_value);
+			if (LITERAL_WORD == start_bit)
 			{
-				countVal += getLiteralCount(temp_value);
-			}else if (ONE_GAP_WORD == startBit)
+				count_val += GetLiteralCount(temp_value);
+			}else if (ONE_GAP_WORD == start_bit)
 			{
-				countVal += ((WORD_SIZE -1)*(temp_value - ONE_GAP_START_FLAG));
+				count_val += ((WORD_SIZE -1)*(temp_value - ONE_GAP_START_FLAG));
 			}
 			value_iterator++;
 		}
@@ -64,162 +68,151 @@ namespace CompressionSchemes{
 		if (ActiveWordSize() > 0)
 		{
 			unsigned long active  = ActiveWord();
-			countVal += getLiteralCount(active);
+			count_val += GetLiteralCount(active);
 		}
-		return countVal;
+		return count_val;
 	}
 
 
-	unsigned long int WAHStructure::getLiteralCount(unsigned long int &bitLiteral)
+	unsigned long int WAHStructure::GetLiteralCount(unsigned long int &_bit_literal)
 	{
 		unsigned long int result = 0;
 		typedef const unsigned char type_byte;
-		type_byte * bytePtr = static_cast<type_byte *>(static_cast<const void *>(&bitLiteral));
-		int length = sizeof(bitLiteral);
+		type_byte * pbyte_ptr = static_cast<type_byte *>(static_cast<const void *>(&_bit_literal));
+		int length = sizeof(_bit_literal);
 		while(length)
 		{
-			result += boost::detail::dynamic_bitset_count_impl::count_table<>::table[*(bytePtr)];
-			bytePtr++;
+			result += boost::detail::dynamic_bitset_count_impl::count_table<>::table[*(pbyte_ptr)];
+			pbyte_ptr++;
 			length--;
 		}
 
 		return result;
 	}
 
-	void WAHStructure::printArray()
-	{
-		for (int i=0;i < mainArraySize ; i++)
-		{
-			cout<<"Index  "<<i<<": "<<mainArray[i]<<endl;
-		}
-		if (activeWord > 0)
-		{
-			cout<<"Active Word : " << activeWord<< endl;
-		}
-	}
-
-	void WAHStructure::compressWords( boost::dynamic_bitset<>& bitMap )
+	
+	void WAHStructure::CompressWords( boost::dynamic_bitset<>& _bit_map )
 	{	
-		int i = 0;
-		int tempIndex = 0;
-		int oneCount = 0;
-		int zeroCount = 0;
+		size_t i = 0;
+		int temp_index = 0;
+		int one_count = 0;
+		int zero_count = 0;
 
-		buildArray(bitMap);
-		while(i < mainArraySize){
-			if (mainArray[i] == 0)
+		BuildArray(_bit_map);
+		while(i < m_iOriginalStreamSize){
+			if (m_iMainArray[i] == 0)
 			{
-				zeroCount++;
-				if (oneCount > 1)
+				zero_count++;
+				if (one_count > 1)
 				{
-					setOneCount(oneCount,compressedStreamVector);
-					oneCount = 0;
-				}else if (oneCount == 1)
+					SetOneCount(one_count,m_compressed_stream);
+					one_count = 0;
+				}else if (one_count == 1)
 				{
-					setLiteral(ONE_LITERAL,compressedStreamVector);
-					oneCount = 0;
+					SetLiteral(ONE_LITERAL,m_compressed_stream);
+					one_count = 0;
 				}
 
-			}else if(mainArray[i] == ONE_LITERAL){
-				oneCount++;
-				if (zeroCount > 1)
+			}else if(m_iMainArray[i] == ONE_LITERAL){
+				one_count++;
+				if (zero_count > 1)
 				{
-					setZeroCount(zeroCount,compressedStreamVector);
-					zeroCount = 0;
-				}else if (zeroCount == 1)
+					SetZeroCount(zero_count,m_compressed_stream);
+					zero_count = 0;
+				}else if (zero_count == 1)
 				{
-					setLiteral(0,compressedStreamVector);
-					zeroCount = 0;
+					SetLiteral(0,m_compressed_stream);
+					zero_count = 0;
 				}
-			}else if (oneCount != 0)
+			}else if (one_count != 0)
 			{
-				if (oneCount == 1)
+				if (one_count == 1)
 				{
-					setLiteral(ONE_LITERAL,compressedStreamVector);
-					oneCount =0;
-				}else if(oneCount > 1){
-					setOneCount(oneCount,compressedStreamVector);
-					oneCount =0;
+					SetLiteral(ONE_LITERAL,m_compressed_stream);
+					one_count =0;
+				}else if(one_count > 1){
+					SetOneCount(one_count,m_compressed_stream);
+					one_count =0;
 				}
 
-				setLiteral(mainArray[i],compressedStreamVector);
-			}else if (zeroCount != 0)
+				SetLiteral(m_iMainArray[i],m_compressed_stream);
+			}else if (zero_count != 0)
 			{
-				if (zeroCount == 1)
+				if (zero_count == 1)
 				{
-					setLiteral(0,compressedStreamVector);
-					zeroCount =0;	
-				}else if (zeroCount > 1)
+					SetLiteral(0,m_compressed_stream);
+					zero_count =0;	
+				}else if (zero_count > 1)
 				{				
-					setZeroCount(zeroCount,compressedStreamVector);
-					zeroCount =0;
+					SetZeroCount(zero_count,m_compressed_stream);
+					zero_count =0;
 				}
 
-				setLiteral(mainArray[i],compressedStreamVector);
+				SetLiteral(m_iMainArray[i],m_compressed_stream);
 
 			}else{
-				setLiteral(mainArray[i],compressedStreamVector);
+				SetLiteral(m_iMainArray[i],m_compressed_stream);
 			}
 			i++;
 		}
-		if (oneCount == 1)
+		if (one_count == 1)
 		{
-			setLiteral(ONE_LITERAL,compressedStreamVector);
-			oneCount = 0;
+			SetLiteral(ONE_LITERAL,m_compressed_stream);
+			one_count = 0;
 
-		}else if (oneCount > 1)
+		}else if (one_count > 1)
 		{
-			setOneCount(oneCount,compressedStreamVector);
-			oneCount = 0;
-		}else if (zeroCount == 1)
+			SetOneCount(one_count,m_compressed_stream);
+			one_count = 0;
+		}else if (zero_count == 1)
 		{
-			setLiteral(0,compressedStreamVector);
-			zeroCount =0;
+			SetLiteral(0,m_compressed_stream);
+			zero_count =0;
 		}
-		else if (zeroCount > 1)
+		else if (zero_count > 1)
 		{
-			setZeroCount(zeroCount,compressedStreamVector);
-			zeroCount =0;
+			SetZeroCount(zero_count,m_compressed_stream);
+			zero_count =0;
 		}		
-		delete mainArray;
+		delete m_iMainArray;
 	}
 
-	void WAHStructure::setOneCount(unsigned long int count,vector<unsigned long int> & compressed)
+	void WAHStructure::SetOneCount(unsigned long int _count,vector<unsigned long int> & _compressed)
 	{
-		unsigned long int comressedValue = count;
-		comressedValue = comressedValue | ONE_GAP_START_FLAG;
-		compressed.push_back(comressedValue);	
+		unsigned long int _comressed_value = _count;
+		_comressed_value = _comressed_value | ONE_GAP_START_FLAG;
+		_compressed.push_back(_comressed_value);	
 
 	} 
 
-	void WAHStructure::setZeroCount(unsigned long int count,vector<unsigned long int> & compressed)
+	void WAHStructure::SetZeroCount(unsigned long int _count,vector<unsigned long int> & _compressed)
 	{
-		unsigned long int compressedValue = count;
-		compressedValue = compressedValue| ZERO_GAP_START_FLAG;
-		compressed.push_back(compressedValue);
+		unsigned long int _compressed_value = _count;
+		_compressed_value = _compressed_value| ZERO_GAP_START_FLAG;
+		_compressed.push_back(_compressed_value);
 	} 
 
-	void WAHStructure::setLiteral(unsigned long int literalVal,vector<unsigned long int> & compressed)
+	void WAHStructure::SetLiteral(unsigned long int _literal_val,vector<unsigned long int> & _compressed)
 	{	
-		compressed.push_back(literalVal);
+		_compressed.push_back(_literal_val);
 	}
 
-	void WAHStructure::printVector()
+	void WAHStructure::PrintCompressedStream()
 	{	
-		for (int i = 0; i < compressedStreamVector.size(); i++)
+		for (size_t i = 0; i < m_compressed_stream.size(); i++)
 		{
-			cout << "Index  "<<i<<":"<<compressedStreamVector[i] << endl;
+			cout << "Index  "<<i<<":"<<m_compressed_stream[i] << endl;
 		}	
 	}
 
 	void WAHStructure::printCompressedStream()
 	{
-		if (&compressedStreamVector != NULL && compressedStreamVector.size() > 0)
+		if (&m_compressed_stream != NULL && m_compressed_stream.size() > 0)
 		{
-			dynamic_bitset<> temp(compressedStreamVector.size() * WORD_SIZE);
-			for (int i  = 0 ; i < compressedStreamVector.size(); i++)
+			dynamic_bitset<> temp(m_compressed_stream.size() * WORD_SIZE);
+			for (size_t i  = 0 ; i < m_compressed_stream.size(); i++)
 			{
-				copyIntegerToBitMap(temp,i);
+				CopyIntegerToBitMap(temp,i);
 			}
 
 			cout << temp << endl;
@@ -228,642 +221,614 @@ namespace CompressionSchemes{
 
 		if (ActiveWordSize() > 0 )
 		{
-			unsigned long int act = (unsigned long int) activeWord;
-			dynamic_bitset<> activeTemp(ActiveWordSize(),act);
-			cout << "Active word : "<< activeTemp <<endl;
+			unsigned long int act = (unsigned long int) m_ulActiveWord;
+			dynamic_bitset<> active_temp(ActiveWordSize(),act);
+			cout << "Active word : "<< active_temp <<endl;
 		}
 
 	}
 
-	void WAHStructure::copyIntegerToBitMap(dynamic_bitset<> &bitmap,int index)
+	void WAHStructure::CopyIntegerToBitMap( dynamic_bitset<> &_bitmap,size_t _index )
 	{
-		int bitmapStartIndex = index*WORD_SIZE;
-		unsigned long int val = (unsigned long int) compressedStreamVector[index];
+		int bitmap_start_index = _index*WORD_SIZE;
+		unsigned long int val = (unsigned long int) m_compressed_stream[_index];
 		dynamic_bitset<> temp(32,val);
-		for (int i = 0;  i < temp.size(); i++)
+		for (size_t i = 0;  i < temp.size(); i++)
 		{
-			bitmap[bitmapStartIndex++] = temp[i];		
+			_bitmap[bitmap_start_index++] = temp[i];		
 		}
 	}
-
-	void WAHStructure::flip()
+	
+	WAHStructure * WAHStructure::operator &(WAHStructure & _structure)
 	{
-		if (activeWord > 0)
+		int compressed_stream_length = m_iOriginalStreamSize;
+		vector<unsigned long int> right_operand = _structure.GetCompressedVector();
+		vector<unsigned long int> left_operand = m_compressed_stream;
+		bool right_operand_zero_run = true;
+		bool left_operand_zero_run = true;	
+		int left_operand_start_position = 0;
+		int left_operand_end_position = 0;
+		int right_operand_start_position = 0;
+		int right_operand_end_position = 0;
+		//int compressed_word_value = 0;
+		int left_operand_index = 0;
+		int right_operand_index = 0;
+		int compressed_word_index = 0;
+		bool gap_extension  = false;
+
+		WAHStructure * result_structure = new WAHStructure();
+		vector<unsigned long int> compressed_result;
+
+		while(left_operand_end_position < compressed_stream_length || right_operand_end_position < compressed_stream_length)
 		{
-			activeWord  = !activeWord;
-		}
-		if (compressedStream.size() > 0)
-		{
-			for (int i = compressedStream.size()-1 ; i >=0 ;)
+			if (left_operand_end_position == right_operand_end_position)
 			{
-				if (compressedStream[i] ==1)
-				{
-					compressedStream[i-1].flip();
-					i -= WORD_SIZE;
-				}else{
-					i --;
-					for (int j = 0; j < (WORD_SIZE -1); j++ )
-					{
-						compressedStream[i].flip();
-						i--;
-					}
-				}
-			}
-		}	
-	}
-
-
-
-	WAHStructure * WAHStructure::operator &(WAHStructure & structure)
-	{
-		int compressedStreamLength = mainArraySize;
-		vector<unsigned long int> rightOperand = structure.getCompressedVector();
-		vector<unsigned long int> leftOperand = compressedStreamVector;
-		bool rightOperandZeroRun = true;
-		bool leftOperandZeroRun = true;	
-		int leftOperandStartPosition = 0;
-		int leftOperandEndPosition = 0;
-		int rightOperandStartPosition = 0;
-		int rightOperandEndPosition = 0;
-		int compressedWordValue = 0;
-		int leftOperandIndex = 0;
-		int rightOperandIndex = 0;
-		int compressedWordIndex = 0;
-		bool gapExtension  = false;
-
-		WAHStructure * st = new WAHStructure();
-		vector<unsigned long int> compressedResult;
-
-		while(leftOperandEndPosition < compressedStreamLength || rightOperandEndPosition < compressedStreamLength)
-		{
-			if (leftOperandEndPosition == rightOperandEndPosition)
-			{
-				int leftOperandStartBitValue = getStartBitValue(leftOperand[leftOperandIndex]);
+				int leftOperandStartBitValue = GetStartBitValue(left_operand[left_operand_index]);
 				if (leftOperandStartBitValue == LITERAL_WORD)
 				{
-					leftOperandEndPosition++;
-					leftOperandStartPosition = leftOperandEndPosition;
-					int rightOperandStartBitValue = getStartBitValue(rightOperand[rightOperandIndex]);
+					left_operand_end_position++;
+					left_operand_start_position = left_operand_end_position;
+					int right_operand_start_bit_value = GetStartBitValue(right_operand[right_operand_index]);
 
-					if (rightOperandStartBitValue == LITERAL_WORD)
+					if (right_operand_start_bit_value == LITERAL_WORD)
 					{
-						rightOperandEndPosition++;
-						rightOperandStartPosition = rightOperandEndPosition;
-						setValueOnCompressedWord(leftOperand[leftOperandIndex++] & rightOperand[rightOperandIndex++],compressedResult);
-					}else if (rightOperandStartBitValue == ONE_GAP_WORD)
+						right_operand_end_position++;
+						right_operand_start_position = right_operand_end_position;
+						SetValueOnCompressedWord(left_operand[left_operand_index++] & right_operand[right_operand_index++],compressed_result);
+					}else if (right_operand_start_bit_value == ONE_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ONE_GAP_START_FLAG);	
-						rightOperandZeroRun = false;
+						right_operand_end_position += (right_operand[right_operand_index] - ONE_GAP_START_FLAG);	
+						right_operand_zero_run = false;
 					}
-					else if (rightOperandStartBitValue == ZERO_GAP_WORD)
+					else if (right_operand_start_bit_value == ZERO_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ZERO_GAP_START_FLAG);	
-						rightOperandZeroRun = true;
+						right_operand_end_position += (right_operand[right_operand_index] - ZERO_GAP_START_FLAG);	
+						right_operand_zero_run = true;
 					}
 
 				}else if (leftOperandStartBitValue == ONE_GAP_WORD)
 				{
-					leftOperandEndPosition += (leftOperand[leftOperandIndex] - ONE_GAP_START_FLAG);
-					leftOperandZeroRun = false;
-					int rightOperandStartBitValue =  getStartBitValue(rightOperand[rightOperandIndex]);
+					left_operand_end_position += (left_operand[left_operand_index] - ONE_GAP_START_FLAG);
+					left_operand_zero_run = false;
+					int rightOperandStartBitValue =  GetStartBitValue(right_operand[right_operand_index]);
 					if (rightOperandStartBitValue == LITERAL_WORD)
 					{					
-						rightOperandEndPosition++;										
+						right_operand_end_position++;										
 					}else if (rightOperandStartBitValue == ONE_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ONE_GAP_START_FLAG);	
-						if (rightOperandEndPosition == leftOperandEndPosition)
+						right_operand_end_position += (right_operand[right_operand_index] - ONE_GAP_START_FLAG);	
+						if (right_operand_end_position == left_operand_end_position)
 						{
-							setValueOnCompressedWord(leftOperand[leftOperandIndex],compressedResult);
-							leftOperandIndex++;
-							rightOperandIndex++;
+							SetValueOnCompressedWord(left_operand[left_operand_index],compressed_result);
+							left_operand_index++;
+							right_operand_index++;
 						}
-						rightOperandZeroRun = false;
+						right_operand_zero_run = false;
 					}
 					else if (rightOperandStartBitValue == ZERO_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ZERO_GAP_START_FLAG);	
-						if (rightOperandEndPosition == leftOperandEndPosition)
+						right_operand_end_position += (right_operand[right_operand_index] - ZERO_GAP_START_FLAG);	
+						if (right_operand_end_position == left_operand_end_position)
 						{
-							setValueOnCompressedWord(rightOperand[rightOperandIndex],compressedResult);
-							leftOperandIndex++;
-							rightOperandIndex++;
+							SetValueOnCompressedWord(right_operand[right_operand_index],compressed_result);
+							left_operand_index++;
+							right_operand_index++;
 						}
-						rightOperandZeroRun = true;
+						right_operand_zero_run = true;
 					}
 
 				}else if (leftOperandStartBitValue == ZERO_GAP_WORD)
 				{
-					leftOperandEndPosition += (leftOperand[leftOperandIndex] - ZERO_GAP_START_FLAG);
-					leftOperandZeroRun = true;
-					int rightOperandStartBitValue = getStartBitValue(rightOperand[rightOperandIndex]);
+					left_operand_end_position += (left_operand[left_operand_index] - ZERO_GAP_START_FLAG);
+					left_operand_zero_run = true;
+					int rightOperandStartBitValue = GetStartBitValue(right_operand[right_operand_index]);
 					if (rightOperandStartBitValue == LITERAL_WORD)
 					{					
-						rightOperandEndPosition++;										
+						right_operand_end_position++;										
 					}else if (rightOperandStartBitValue == ONE_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ONE_GAP_START_FLAG);	
-						if (rightOperandEndPosition == leftOperandEndPosition)
+						right_operand_end_position += (right_operand[right_operand_index] - ONE_GAP_START_FLAG);	
+						if (right_operand_end_position == left_operand_end_position)
 						{
-							setValueOnCompressedWord(leftOperand[leftOperandIndex],compressedResult);
-							leftOperandIndex++;
-							rightOperandIndex++;
+							SetValueOnCompressedWord(left_operand[left_operand_index],compressed_result);
+							left_operand_index++;
+							right_operand_index++;
 						}
-						rightOperandZeroRun = false;
+						right_operand_zero_run = false;
 					}
 					else if (rightOperandStartBitValue == ZERO_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ZERO_GAP_START_FLAG);	
-						if (rightOperandEndPosition == leftOperandEndPosition)
+						right_operand_end_position += (right_operand[right_operand_index] - ZERO_GAP_START_FLAG);	
+						if (right_operand_end_position == left_operand_end_position)
 						{
-							setValueOnCompressedWord(leftOperand[leftOperandIndex],compressedResult);
-							leftOperandIndex++;
-							rightOperandIndex++;
+							SetValueOnCompressedWord(left_operand[left_operand_index],compressed_result);
+							left_operand_index++;
+							right_operand_index++;
 						}
-						rightOperandZeroRun = true;
+						right_operand_zero_run = true;
 					}
 
 				}
 
 			}
-			else if (leftOperandEndPosition > rightOperandEndPosition)
+			else if (left_operand_end_position > right_operand_end_position)
 			{
 
-				if (gapExtension)
+				if (gap_extension)
 				{
-					int leftStartBit = getStartBitValue(leftOperand[leftOperandIndex]);
+					int leftStartBit = GetStartBitValue(left_operand[left_operand_index]);
 					if (leftStartBit == ZERO_GAP_WORD)
 					{
-						unsigned long int blockRun = leftOperandEndPosition - rightOperandEndPosition;
-						unsigned long int gapRunBlocks = leftOperand[leftOperandIndex] - ZERO_GAP_START_FLAG;
-						unsigned long int resultGap = leftOperand[leftOperandIndex] - gapRunBlocks + blockRun;
-						setValueOnCompressedWord(resultGap,compressedResult);
-						vector<int> result = alignRightWithLeft(leftOperandEndPosition,rightOperandIndex,rightOperandEndPosition,rightOperand,compressedResult,ZERO_GAP,AND,true);
-						rightOperandIndex = result[0];
-						rightOperandEndPosition = result[1];
-						if (leftOperandEndPosition == rightOperandEndPosition)
+						unsigned long int extra_blocks = left_operand_end_position - right_operand_end_position;
+						unsigned long int no_of_blocks = left_operand[left_operand_index] - ZERO_GAP_START_FLAG;
+						unsigned long int new_gap = left_operand[left_operand_index] - no_of_blocks + extra_blocks;
+						SetValueOnCompressedWord(new_gap,compressed_result);
+						vector<int> result = AlignRightWithLeft(left_operand_end_position,right_operand_index,right_operand_end_position,right_operand,compressed_result,ZERO_GAP,AND,true);
+						right_operand_index = result[0];
+						right_operand_end_position = result[1];
+						if (left_operand_end_position == right_operand_end_position)
 						{
-							leftOperandIndex++;
-							rightOperandIndex++;
-							gapExtension = false;
-						}else if(leftOperandEndPosition < rightOperandEndPosition)
+							left_operand_index++;
+							right_operand_index++;
+							gap_extension = false;
+						}else if(left_operand_end_position < right_operand_end_position)
 						{
-							gapExtension = true;
+							gap_extension = true;
 						}
 					}else if (leftStartBit == ONE_GAP_WORD)
 					{
-						vector<int> result = alignRightWithLeft(leftOperandEndPosition,rightOperandIndex,rightOperandEndPosition,rightOperand,compressedResult,ONE_GAP,AND,true);
-						rightOperandIndex = result[0];
-						rightOperandEndPosition = result[1];
-						if (leftOperandEndPosition == rightOperandEndPosition)
+						vector<int> result = AlignRightWithLeft(left_operand_end_position,right_operand_index,right_operand_end_position,right_operand,compressed_result,ONE_GAP,AND,true);
+						right_operand_index = result[0];
+						right_operand_end_position = result[1];
+						if (left_operand_end_position == right_operand_end_position)
 						{
-							leftOperandIndex++;
-							rightOperandIndex++;
-							gapExtension = false;
-						}else if(leftOperandEndPosition < rightOperandEndPosition)
+							left_operand_index++;
+							right_operand_index++;
+							gap_extension = false;
+						}else if(left_operand_end_position < right_operand_end_position)
 						{
-							gapExtension = true;
+							gap_extension = true;
 						}
 					}
 
 
 				}else
-				{if (leftOperandZeroRun)
+				{if (left_operand_zero_run)
 				{
-					setValueOnCompressedWord(leftOperand[leftOperandIndex],compressedResult);
-					vector<int> result = alignRightWithLeft(leftOperandEndPosition,rightOperandIndex,rightOperandEndPosition,rightOperand,compressedResult,ZERO_GAP,AND,false);
-					rightOperandIndex = result[0];
-					rightOperandEndPosition = result[1];
-					if (leftOperandEndPosition == rightOperandEndPosition)
+					SetValueOnCompressedWord(left_operand[left_operand_index],compressed_result);
+					vector<int> result = AlignRightWithLeft(left_operand_end_position,right_operand_index,right_operand_end_position,right_operand,compressed_result,ZERO_GAP,AND,false);
+					right_operand_index = result[0];
+					right_operand_end_position = result[1];
+					if (left_operand_end_position == right_operand_end_position)
 					{
-						leftOperandIndex++;
-						rightOperandIndex++;
-						gapExtension = false;
-					}else if(leftOperandEndPosition < rightOperandEndPosition)
+						left_operand_index++;
+						right_operand_index++;
+						gap_extension = false;
+					}else if(left_operand_end_position < right_operand_end_position)
 					{
-						gapExtension = true;
+						gap_extension = true;
 					}
 				} 
 				else
 				{
-					vector<int> result = alignRightWithLeft(leftOperandEndPosition,rightOperandIndex,rightOperandEndPosition,rightOperand,compressedResult,ONE_GAP,AND,false);
-					rightOperandIndex = result[0];
-					rightOperandEndPosition = result[1];
-					if (leftOperandEndPosition == rightOperandEndPosition)
+					vector<int> result = AlignRightWithLeft(left_operand_end_position,right_operand_index,right_operand_end_position,right_operand,compressed_result,ONE_GAP,AND,false);
+					right_operand_index = result[0];
+					right_operand_end_position = result[1];
+					if (left_operand_end_position == right_operand_end_position)
 					{
-						leftOperandIndex++;
-						rightOperandIndex++;
-						gapExtension = false;
-					}else if(leftOperandEndPosition < rightOperandEndPosition)
+						left_operand_index++;
+						right_operand_index++;
+						gap_extension = false;
+					}else if(left_operand_end_position < right_operand_end_position)
 					{
-						gapExtension = true;
+						gap_extension = true;
 					}
 
 				}
 				}
-			}else if (leftOperandEndPosition < rightOperandEndPosition)
+			}else if (left_operand_end_position < right_operand_end_position)
 			{
-				if (gapExtension)
+				if (gap_extension)
 				{
-					int rightStartBit = getStartBitValue(rightOperand[rightOperandIndex]);
-					if (rightStartBit == ZERO_GAP_WORD)
+					int right_start_bit = GetStartBitValue(right_operand[right_operand_index]);
+					if (right_start_bit == ZERO_GAP_WORD)
 					{
-						unsigned long int blockRun = rightOperandEndPosition - leftOperandEndPosition;
-						unsigned long int gapRunBlocks = rightOperand[rightOperandIndex] - ZERO_GAP_START_FLAG;
-						unsigned long int resultGap = ZERO_GAP_START_FLAG + blockRun;
-						setValueOnCompressedWord(resultGap,compressedResult);
-						vector<int> result = alignLeftWithRight(rightOperandEndPosition,leftOperandIndex,leftOperandEndPosition,leftOperand,compressedResult,ZERO_GAP,AND,gapExtension);
-						leftOperandIndex = result[0];
-						leftOperandEndPosition = result[1];
-						if (leftOperandEndPosition == rightOperandEndPosition)
+						unsigned long int extra_blocks  = right_operand_end_position - left_operand_end_position;
+						unsigned long int no_of_blocks  = right_operand[right_operand_index] - ZERO_GAP_START_FLAG;
+						unsigned long int new_gap  = ZERO_GAP_START_FLAG + extra_blocks ;
+						SetValueOnCompressedWord(new_gap ,compressed_result);
+						vector<int> result = AlignLeftWithRight(right_operand_end_position,left_operand_index,left_operand_end_position,left_operand,compressed_result,ZERO_GAP,AND,gap_extension);
+						left_operand_index = result[0];
+						left_operand_end_position = result[1];
+						if (left_operand_end_position == right_operand_end_position)
 						{
-							leftOperandIndex++;
-							rightOperandIndex++;
-							gapExtension = false;
-						}else if(rightOperandEndPosition < leftOperandEndPosition)
+							left_operand_index++;
+							right_operand_index++;
+							gap_extension = false;
+						}else if(right_operand_end_position < left_operand_end_position)
 						{
-							gapExtension = true;
+							gap_extension = true;
 						}
-					}else if (rightStartBit == ONE_GAP_WORD)
+					}else if (right_start_bit == ONE_GAP_WORD)
 					{
-						vector<int> result = alignLeftWithRight(rightOperandEndPosition,leftOperandIndex,leftOperandEndPosition,leftOperand,compressedResult,ONE_GAP,AND,gapExtension);
-						leftOperandIndex = result[0];
-						leftOperandEndPosition = result[1];
-						if (leftOperandEndPosition == rightOperandEndPosition)
+						vector<int> result = AlignLeftWithRight(right_operand_end_position,left_operand_index,left_operand_end_position,left_operand,compressed_result,ONE_GAP,AND,gap_extension);
+						left_operand_index = result[0];
+						left_operand_end_position = result[1];
+						if (left_operand_end_position == right_operand_end_position)
 						{
-							leftOperandIndex++;
-							rightOperandIndex++;
-							gapExtension = false;
-						}else if(rightOperandEndPosition < leftOperandEndPosition)
+							left_operand_index++;
+							right_operand_index++;
+							gap_extension = false;
+						}else if(right_operand_end_position < left_operand_end_position)
 						{
-							gapExtension = true;
+							gap_extension = true;
 						}
 					}
 
 				}else
-				{if (rightOperandZeroRun)
+				{if (right_operand_zero_run)
 				{
-					setValueOnCompressedWord(rightOperand[rightOperandIndex],compressedResult);
-					vector<int> result = alignLeftWithRight(rightOperandEndPosition,leftOperandIndex,leftOperandEndPosition,leftOperand,compressedResult,ZERO_GAP,AND,gapExtension);
-					leftOperandIndex = result[0];
-					leftOperandEndPosition = result[1];
-					if (leftOperandEndPosition == rightOperandEndPosition)
+					SetValueOnCompressedWord(right_operand[right_operand_index],compressed_result);
+					vector<int> result = AlignLeftWithRight(right_operand_end_position,left_operand_index,left_operand_end_position,left_operand,compressed_result,ZERO_GAP,AND,gap_extension);
+					left_operand_index = result[0];
+					left_operand_end_position = result[1];
+					if (left_operand_end_position == right_operand_end_position)
 					{
-						leftOperandIndex++;
-						rightOperandIndex++;
-						gapExtension = false;
-					}else if(rightOperandEndPosition < leftOperandEndPosition)
+						left_operand_index++;
+						right_operand_index++;
+						gap_extension = false;
+					}else if(right_operand_end_position < left_operand_end_position)
 					{
-						gapExtension = true;
+						gap_extension = true;
 					}
 				} 
 				else
 				{
-					vector<int> result = alignLeftWithRight(rightOperandEndPosition,leftOperandIndex,leftOperandEndPosition,leftOperand,compressedResult,ONE_GAP,AND,gapExtension);
-					leftOperandIndex = result[0];
-					leftOperandEndPosition = result[1];
-					if (leftOperandEndPosition == rightOperandEndPosition)
+					vector<int> result = AlignLeftWithRight(right_operand_end_position,left_operand_index,left_operand_end_position,left_operand,compressed_result,ONE_GAP,AND,gap_extension);
+					left_operand_index = result[0];
+					left_operand_end_position = result[1];
+					if (left_operand_end_position == right_operand_end_position)
 					{
-						leftOperandIndex++;
-						rightOperandIndex++;
-						gapExtension = false;
-					}else if(rightOperandEndPosition < leftOperandEndPosition)
+						left_operand_index++;
+						right_operand_index++;
+						gap_extension = false;
+					}else if(right_operand_end_position < left_operand_end_position)
 					{
-						gapExtension = true;
+						gap_extension = true;
 					}
 				}
 				}
 			}
 		}
 
-		if (activeWordSize > 0)
+		if (m_iActiveWordSize > 0)
 		{
-			st->ActiveWordSize(ActiveWordSize());
-			st->ActiveWord(activeWord & (structure.ActiveWord()));
+			result_structure->ActiveWordSize(ActiveWordSize());
+			result_structure->ActiveWord(m_ulActiveWord & (_structure.ActiveWord()));
 		}
-		st->setCompressedStream(compressedResult);
-		st->MainArraySize(MainArraySize());
-		return st;
+		result_structure->SetCompressedStream(compressed_result);
+		result_structure->OriginalStreamSize(OriginalStreamSize());
+		return result_structure;
 	}
 
 
 
 	WAHStructure * WAHStructure::operator |(WAHStructure & structure)
 	{
-		int compressedStreamLength = mainArraySize;
-		vector<unsigned long int> rightOperand = structure.getCompressedVector();
-		vector<unsigned long int> leftOperand = compressedStreamVector;
-		bool rightOperandZeroRun = true;
-		bool leftOperandZeroRun = true;	
-		int leftOperandStartPosition = 0;
-		int leftOperandEndPosition = 0;
-		int rightOperandStartPosition = 0;
-		int rightOperandEndPosition = 0;
-		int compressedWordValue = 0;
-		int leftOperandIndex = 0;
-		int rightOperandIndex = 0;
-		int compressedWordIndex = 0;
-		bool gapExtension  = false;
+		int compressed_stream_length  = m_iOriginalStreamSize;
+		vector<unsigned long int> right_operand  = structure.GetCompressedVector();
+		vector<unsigned long int> left_operand  = m_compressed_stream;
+		bool right_operand_zero_run  = true;
+		bool left_operand_zero_run  = true;	
+		int left_operand_start_position  = 0;
+		int left_operand_end_position  = 0;
+		int right_operand_start_position  = 0;
+		int right_operand_end_position  = 0;
+		//int compressed_word_value  = 0;
+		int left_operand_index  = 0;
+		int right_operand_index  = 0;
+		int compressed_word_index  = 0;
+		bool gap_extension    = false;
 
 		WAHStructure * st = new WAHStructure();
 		vector<unsigned long int> compressedResult;
 
-		while(leftOperandEndPosition < compressedStreamLength || rightOperandEndPosition < compressedStreamLength)
+		while(left_operand_end_position  < compressed_stream_length  || right_operand_end_position  < compressed_stream_length )
 		{
-			if (leftOperandEndPosition == rightOperandEndPosition)
+			if (left_operand_end_position  == right_operand_end_position )
 			{
-				int leftOperandStartBitValue = getStartBitValue(leftOperand[leftOperandIndex]);
+				int leftOperandStartBitValue = GetStartBitValue(left_operand [left_operand_index ]);
 				if (leftOperandStartBitValue == LITERAL_WORD)
 				{
-					leftOperandEndPosition++;
-					leftOperandStartPosition = leftOperandEndPosition;
-					int rightOperandStartBitValue = getStartBitValue(rightOperand[rightOperandIndex]);
+					left_operand_end_position ++;
+					left_operand_start_position  = left_operand_end_position ;
+					int rightOperandStartBitValue = GetStartBitValue(right_operand [right_operand_index ]);
 
 					if (rightOperandStartBitValue == LITERAL_WORD)
 					{
-						rightOperandEndPosition++;
-						rightOperandStartPosition = rightOperandEndPosition;
-						setValueOnCompressedWord(leftOperand[leftOperandIndex++] | rightOperand[rightOperandIndex++],compressedResult);
+						right_operand_end_position ++;
+						right_operand_start_position  = right_operand_end_position ;
+						SetValueOnCompressedWord(left_operand [left_operand_index ++] | right_operand [right_operand_index ++],compressedResult);
 					}else if (rightOperandStartBitValue == ONE_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ONE_GAP_START_FLAG);	
-						rightOperandZeroRun = false;
+						right_operand_end_position  += (right_operand [right_operand_index ] - ONE_GAP_START_FLAG);	
+						right_operand_zero_run  = false;
 					}
 					else if (rightOperandStartBitValue == ZERO_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ZERO_GAP_START_FLAG);	
-						rightOperandZeroRun = true;
+						right_operand_end_position  += (right_operand [right_operand_index ] - ZERO_GAP_START_FLAG);	
+						right_operand_zero_run  = true;
 					}
 
 				}else if (leftOperandStartBitValue == ZERO_GAP_WORD)
 				{
-					leftOperandEndPosition += (leftOperand[leftOperandIndex] - ZERO_GAP_START_FLAG);
-					leftOperandZeroRun = true;
-					int rightOperandStartBitValue =  getStartBitValue(rightOperand[rightOperandIndex]);
+					left_operand_end_position  += (left_operand [left_operand_index ] - ZERO_GAP_START_FLAG);
+					left_operand_zero_run  = true;
+					int rightOperandStartBitValue =  GetStartBitValue(right_operand [right_operand_index ]);
 					if (rightOperandStartBitValue == LITERAL_WORD)
 					{					
-						rightOperandEndPosition++;										
+						right_operand_end_position ++;										
 					}else if (rightOperandStartBitValue == ONE_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ONE_GAP_START_FLAG);	
-						if (rightOperandEndPosition == leftOperandEndPosition)
+						right_operand_end_position  += (right_operand [right_operand_index ] - ONE_GAP_START_FLAG);	
+						if (right_operand_end_position  == left_operand_end_position )
 						{
-							setValueOnCompressedWord(rightOperand[rightOperandIndex],compressedResult);
-							leftOperandIndex++;
-							rightOperandIndex++;
+							SetValueOnCompressedWord(right_operand [right_operand_index ],compressedResult);
+							left_operand_index ++;
+							right_operand_index ++;
 						}
-						rightOperandZeroRun = false;
+						right_operand_zero_run  = false;
 					}
 					else if (rightOperandStartBitValue == ZERO_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ZERO_GAP_START_FLAG);	
-						if (rightOperandEndPosition == leftOperandEndPosition)
+						right_operand_end_position  += (right_operand [right_operand_index ] - ZERO_GAP_START_FLAG);	
+						if (right_operand_end_position  == left_operand_end_position )
 						{
-							setValueOnCompressedWord(rightOperand[rightOperandIndex],compressedResult);
-							leftOperandIndex++;
-							rightOperandIndex++;
+							SetValueOnCompressedWord(right_operand [right_operand_index ],compressedResult);
+							left_operand_index ++;
+							right_operand_index ++;
 						}
-						rightOperandZeroRun = true;
+						right_operand_zero_run  = true;
 					}
 
 				}else if (leftOperandStartBitValue == ONE_GAP_WORD)
 				{
-					leftOperandEndPosition += (leftOperand[leftOperandIndex] - ONE_GAP_START_FLAG);
-					leftOperandZeroRun = false;
-					int rightOperandStartBitValue = getStartBitValue(rightOperand[rightOperandIndex]);
+					left_operand_end_position  += (left_operand [left_operand_index ] - ONE_GAP_START_FLAG);
+					left_operand_zero_run  = false;
+					int rightOperandStartBitValue = GetStartBitValue(right_operand [right_operand_index ]);
 					if (rightOperandStartBitValue == LITERAL_WORD)
 					{					
-						rightOperandEndPosition++;										
+						right_operand_end_position ++;										
 					}else if (rightOperandStartBitValue == ONE_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ONE_GAP_START_FLAG);	
-						if (rightOperandEndPosition == leftOperandEndPosition)
+						right_operand_end_position  += (right_operand [right_operand_index ] - ONE_GAP_START_FLAG);	
+						if (right_operand_end_position  == left_operand_end_position )
 						{
-							setValueOnCompressedWord(leftOperand[leftOperandIndex],compressedResult);
-							leftOperandIndex++;
-							rightOperandIndex++;
+							SetValueOnCompressedWord(left_operand [left_operand_index ],compressedResult);
+							left_operand_index ++;
+							right_operand_index ++;
 						}
-						rightOperandZeroRun = false;
+						right_operand_zero_run  = false;
 					}
 					else if (rightOperandStartBitValue == ZERO_GAP_WORD)
 					{
-						rightOperandEndPosition += (rightOperand[rightOperandIndex] - ZERO_GAP_START_FLAG);	
-						if (rightOperandEndPosition == leftOperandEndPosition)
+						right_operand_end_position  += (right_operand [right_operand_index ] - ZERO_GAP_START_FLAG);	
+						if (right_operand_end_position  == left_operand_end_position )
 						{
-							setValueOnCompressedWord(leftOperand[leftOperandIndex],compressedResult);
-							leftOperandIndex++;
-							rightOperandIndex++;
+							SetValueOnCompressedWord(left_operand [left_operand_index ],compressedResult);
+							left_operand_index ++;
+							right_operand_index ++;
 						}
-						rightOperandZeroRun = true;
+						right_operand_zero_run  = true;
 					}
 
 				}
 
 			}
-			else if (leftOperandEndPosition > rightOperandEndPosition)
+			else if (left_operand_end_position  > right_operand_end_position )
 			{
 
-				if (gapExtension)
+				if (gap_extension  )
 				{
-					int leftStartBit = getStartBitValue(leftOperand[leftOperandIndex]);
+					int leftStartBit = GetStartBitValue(left_operand [left_operand_index ]);
 					if (leftStartBit == ONE_GAP_WORD)
 					{
-						unsigned long int blockRun = leftOperandEndPosition - rightOperandEndPosition;
-						unsigned long int gapRunBlocks = leftOperand[leftOperandIndex] - ONE_GAP_START_FLAG;
-						unsigned long int resultGap = leftOperand[leftOperandIndex] - gapRunBlocks + blockRun;
-						setValueOnCompressedWord(resultGap,compressedResult);
-						vector<int> result = alignRightWithLeft(leftOperandEndPosition,rightOperandIndex,rightOperandEndPosition,rightOperand,compressedResult,ONE_GAP,OR,gapExtension);
-						rightOperandIndex = result[0];
-						rightOperandEndPosition = result[1];
-						if (leftOperandEndPosition == rightOperandEndPosition)
+						unsigned long int blockRun = left_operand_end_position  - right_operand_end_position ;
+						unsigned long int gapRunBlocks = left_operand [left_operand_index ] - ONE_GAP_START_FLAG;
+						unsigned long int resultGap = left_operand [left_operand_index ] - gapRunBlocks + blockRun;
+						SetValueOnCompressedWord(resultGap,compressedResult);
+						vector<int> result = AlignRightWithLeft(left_operand_end_position ,right_operand_index ,right_operand_end_position ,right_operand ,compressedResult,ONE_GAP,OR,gap_extension  );
+						right_operand_index  = result[0];
+						right_operand_end_position  = result[1];
+						if (left_operand_end_position  == right_operand_end_position )
 						{
-							leftOperandIndex++;
-							rightOperandIndex++;
-							gapExtension = false;
-						}else if(leftOperandEndPosition < rightOperandEndPosition)
+							left_operand_index ++;
+							right_operand_index ++;
+							gap_extension   = false;
+						}else if(left_operand_end_position  < right_operand_end_position )
 						{
-							gapExtension = true;
+							gap_extension   = true;
 						}
 					}else if (leftStartBit == ZERO_GAP_WORD)
 					{
-						vector<int> result = alignRightWithLeft(leftOperandEndPosition,rightOperandIndex,rightOperandEndPosition,rightOperand,compressedResult,ZERO_GAP,OR,gapExtension);
-						rightOperandIndex = result[0];
-						rightOperandEndPosition = result[1];
-						if (leftOperandEndPosition == rightOperandEndPosition)
+						vector<int> result = AlignRightWithLeft(left_operand_end_position ,right_operand_index ,right_operand_end_position ,right_operand ,compressedResult,ZERO_GAP,OR,gap_extension  );
+						right_operand_index  = result[0];
+						right_operand_end_position  = result[1];
+						if (left_operand_end_position  == right_operand_end_position )
 						{
-							leftOperandIndex++;
-							rightOperandIndex++;
-							gapExtension = false;
-						}else if(leftOperandEndPosition < rightOperandEndPosition)
+							left_operand_index ++;
+							right_operand_index ++;
+							gap_extension   = false;
+						}else if(left_operand_end_position  < right_operand_end_position )
 						{
-							gapExtension = true;
+							gap_extension   = true;
 						}
 					}
 
 
 				}else
-				{if (!leftOperandZeroRun)
+				{if (!left_operand_zero_run )
 				{
-					setValueOnCompressedWord(leftOperand[leftOperandIndex],compressedResult);
-					vector<int> result = alignRightWithLeft(leftOperandEndPosition,rightOperandIndex,rightOperandEndPosition,rightOperand,compressedResult,ONE_GAP,OR,gapExtension);
-					rightOperandIndex = result[0];
-					rightOperandEndPosition = result[1];
-					if (leftOperandEndPosition == rightOperandEndPosition)
+					SetValueOnCompressedWord(left_operand [left_operand_index ],compressedResult);
+					vector<int> result = AlignRightWithLeft(left_operand_end_position ,right_operand_index ,right_operand_end_position ,right_operand ,compressedResult,ONE_GAP,OR,gap_extension  );
+					right_operand_index  = result[0];
+					right_operand_end_position  = result[1];
+					if (left_operand_end_position  == right_operand_end_position )
 					{
-						leftOperandIndex++;
-						rightOperandIndex++;
-						gapExtension = false;
-					}else if(leftOperandEndPosition < rightOperandEndPosition)
+						left_operand_index ++;
+						right_operand_index ++;
+						gap_extension   = false;
+					}else if(left_operand_end_position  < right_operand_end_position )
 					{
-						gapExtension = true;
+						gap_extension   = true;
 					}
 				} 
 				else
 				{
-					vector<int> result = alignRightWithLeft(leftOperandEndPosition,rightOperandIndex,rightOperandEndPosition,rightOperand,compressedResult,ZERO_GAP,OR,gapExtension);
-					rightOperandIndex = result[0];
-					rightOperandEndPosition = result[1];
-					if (leftOperandEndPosition == rightOperandEndPosition)
+					vector<int> result = AlignRightWithLeft(left_operand_end_position ,right_operand_index ,right_operand_end_position ,right_operand ,compressedResult,ZERO_GAP,OR,gap_extension  );
+					right_operand_index  = result[0];
+					right_operand_end_position  = result[1];
+					if (left_operand_end_position  == right_operand_end_position )
 					{
-						leftOperandIndex++;
-						rightOperandIndex++;
-						gapExtension = false;
-					}else if(leftOperandEndPosition < rightOperandEndPosition)
+						left_operand_index ++;
+						right_operand_index ++;
+						gap_extension   = false;
+					}else if(left_operand_end_position  < right_operand_end_position )
 					{
-						gapExtension = true;
+						gap_extension   = true;
 					}
 
 				}
 				}
-			}else if (leftOperandEndPosition < rightOperandEndPosition)
+			}else if (left_operand_end_position  < right_operand_end_position )
 			{
-				if (gapExtension)
+				if (gap_extension  )
 				{
-					int rightStartBit = getStartBitValue(rightOperand[rightOperandIndex]);
+					int rightStartBit = GetStartBitValue(right_operand [right_operand_index ]);
 					if (rightStartBit == ONE_GAP_WORD)
 					{
-						unsigned long int blockRun = rightOperandEndPosition - leftOperandEndPosition;
+						unsigned long int blockRun = right_operand_end_position  - left_operand_end_position ;
 						//unsigned long int gapRunBlocks = rightOperand[rightOperandIndex] - ONE_GAP_START_FLAG;
 						unsigned long int resultGap = ONE_GAP_START_FLAG + blockRun;
-						setValueOnCompressedWord(resultGap,compressedResult);
-						vector<int> result = alignLeftWithRight(rightOperandEndPosition,leftOperandIndex,leftOperandEndPosition,leftOperand,compressedResult,ONE_GAP,OR,gapExtension);
-						leftOperandIndex = result[0];
-						leftOperandEndPosition = result[1];
-						if (leftOperandEndPosition == rightOperandEndPosition)
+						SetValueOnCompressedWord(resultGap,compressedResult);
+						vector<int> result = AlignLeftWithRight(right_operand_end_position ,left_operand_index ,left_operand_end_position ,left_operand ,compressedResult,ONE_GAP,OR,gap_extension  );
+						left_operand_index  = result[0];
+						left_operand_end_position  = result[1];
+						if (left_operand_end_position  == right_operand_end_position )
 						{
-							leftOperandIndex++;
-							rightOperandIndex++;
-							gapExtension = false;
-						}else if(rightOperandEndPosition < leftOperandEndPosition)
+							left_operand_index ++;
+							right_operand_index ++;
+							gap_extension   = false;
+						}else if(right_operand_end_position  < left_operand_end_position )
 						{
-							gapExtension = true;
+							gap_extension   = true;
 						}
 					}else if (rightStartBit == ZERO_GAP_WORD)
 					{
-						vector<int> result = alignLeftWithRight(rightOperandEndPosition,leftOperandIndex,leftOperandEndPosition,leftOperand,compressedResult,ZERO_GAP,OR,gapExtension);
-						leftOperandIndex = result[0];
-						leftOperandEndPosition = result[1];
-						if (leftOperandEndPosition == rightOperandEndPosition)
+						vector<int> result = AlignLeftWithRight(right_operand_end_position ,left_operand_index ,left_operand_end_position ,left_operand ,compressedResult,ZERO_GAP,OR,gap_extension  );
+						left_operand_index  = result[0];
+						left_operand_end_position  = result[1];
+						if (left_operand_end_position  == right_operand_end_position )
 						{
-							leftOperandIndex++;
-							rightOperandIndex++;
-							gapExtension = false;
-						}else if(rightOperandEndPosition < leftOperandEndPosition)
+							left_operand_index ++;
+							right_operand_index ++;
+							gap_extension   = false;
+						}else if(right_operand_end_position  < left_operand_end_position )
 						{
-							gapExtension = true;
+							gap_extension   = true;
 						}
 					}
 
 				}else
-				{if (!rightOperandZeroRun)
+				{if (!right_operand_zero_run )
 				{
-					setValueOnCompressedWord(rightOperand[rightOperandIndex],compressedResult);
-					vector<int> result = alignLeftWithRight(rightOperandEndPosition,leftOperandIndex,leftOperandEndPosition,leftOperand,compressedResult,ONE_GAP,OR,gapExtension);
-					leftOperandIndex = result[0];
-					leftOperandEndPosition = result[1];
-					if (leftOperandEndPosition == rightOperandEndPosition)
+					SetValueOnCompressedWord(right_operand [right_operand_index ],compressedResult);
+					vector<int> result = AlignLeftWithRight(right_operand_end_position ,left_operand_index ,left_operand_end_position ,left_operand ,compressedResult,ONE_GAP,OR,gap_extension  );
+					left_operand_index  = result[0];
+					left_operand_end_position  = result[1];
+					if (left_operand_end_position  == right_operand_end_position )
 					{
-						leftOperandIndex++;
-						rightOperandIndex++;
-						gapExtension = false;
-					}else if(rightOperandEndPosition < leftOperandEndPosition)
+						left_operand_index ++;
+						right_operand_index ++;
+						gap_extension   = false;
+					}else if(right_operand_end_position  < left_operand_end_position )
 					{
-						gapExtension = true;
+						gap_extension   = true;
 					}
 				} 
 				else
 				{
-					vector<int> result = alignLeftWithRight(rightOperandEndPosition,leftOperandIndex,leftOperandEndPosition,leftOperand,compressedResult,ZERO_GAP,OR,gapExtension);
-					leftOperandIndex = result[0];
-					leftOperandEndPosition = result[1];
-					if (leftOperandEndPosition == rightOperandEndPosition)
+					vector<int> result = AlignLeftWithRight(right_operand_end_position ,left_operand_index ,left_operand_end_position ,left_operand ,compressedResult,ZERO_GAP,OR,gap_extension  );
+					left_operand_index  = result[0];
+					left_operand_end_position  = result[1];
+					if (left_operand_end_position  == right_operand_end_position )
 					{
-						leftOperandIndex++;
-						rightOperandIndex++;
-						gapExtension = false;
-					}else if(rightOperandEndPosition < leftOperandEndPosition)
+						left_operand_index ++;
+						right_operand_index ++;
+						gap_extension   = false;
+					}else if(right_operand_end_position  < left_operand_end_position )
 					{
-						gapExtension = true;
+						gap_extension   = true;
 					}
 				}
 				}
 			}
 		}
 
-		if (activeWordSize > 0)
+		if (m_iActiveWordSize > 0)
 		{
 			st->ActiveWordSize(ActiveWordSize());
-			st->ActiveWord(activeWord | (structure.ActiveWord()));
+			st->ActiveWord(m_ulActiveWord | (structure.ActiveWord()));
 		}
-		st->setCompressedStream(compressedResult);
-		st->MainArraySize(MainArraySize());
+		st->SetCompressedStream(compressedResult);
+		st->OriginalStreamSize(OriginalStreamSize());
 		return st;
 	}
 
 
 
-	vector<int> WAHStructure::alignRightWithLeft( int leftOpEndPos,int rightOpIndex,int rightOpEndPos,vector<unsigned long int> &rightOperand,vector<unsigned long int> &resultVector,longer_operand longer,operation_type type /*= AND*/,bool gapExtensionState )
+	vector<int> WAHStructure::AlignRightWithLeft( int _left_op_end_pos,int _right_op_index,int _right_op_end_pos,vector<unsigned long int> &_right_operand,vector<unsigned long int> &_result_vector,longer_operand _longer,operation_type _type /*= AND*/,bool _gap_extension_state )
 	{
 		vector<int> result;
-		int indexVal=0;
-		int opEndPos = 0;
-		bool zeroGap = false;
+		int index_val=0;
+		int op_end_pos = 0;
+		bool zero_gap = false;
 
-		if (type == AND)
+		if (_type == AND)
 		{
-			if (longer == ONE_GAP && !gapExtensionState)
+			if (_longer == ONE_GAP && !_gap_extension_state)
 			{
 				/*int rightStartBit = getStartBitValue(rightOperand[rightOpIndex]);
 				if (rightStartBit == LITERAL_WORD)
 				{*/
-				setValueOnCompressedWord(rightOperand[rightOpIndex],resultVector);
+				SetValueOnCompressedWord(_right_operand[_right_op_index],_result_vector);
 				//}
 			}
 
-			while(leftOpEndPos > rightOpEndPos){
-				int startBit = getStartBitValue(rightOperand[++rightOpIndex]);
+			while(_left_op_end_pos > _right_op_end_pos){
+				int startBit = GetStartBitValue(_right_operand[++_right_op_index]);
 				if (startBit == LITERAL_WORD)
 				{
-					rightOpEndPos++;			
+					_right_op_end_pos++;			
 				}else if (startBit == ONE_GAP_WORD)
 				{
-					rightOpEndPos += (rightOperand[rightOpIndex] - ONE_GAP_START_FLAG);			
+					_right_op_end_pos += (_right_operand[_right_op_index] - ONE_GAP_START_FLAG);			
 				}else if (startBit == ZERO_GAP_WORD)
 				{
-					rightOpEndPos += (rightOperand[rightOpIndex] - ZERO_GAP_START_FLAG);			
+					_right_op_end_pos += (_right_operand[_right_op_index] - ZERO_GAP_START_FLAG);			
 				}
-				indexVal = rightOpIndex;
-				opEndPos = rightOpEndPos;	
+				index_val = _right_op_index;
+				op_end_pos = _right_op_end_pos;	
 
-				if (longer == ONE_GAP)
+				if (_longer == ONE_GAP)
 				{
-					if (leftOpEndPos >= rightOpEndPos)
+					if (_left_op_end_pos >= _right_op_end_pos)
 					{
-						setValueOnCompressedWord(rightOperand[rightOpIndex],resultVector);
+						SetValueOnCompressedWord(_right_operand[_right_op_index],_result_vector);
 					}else{
-						unsigned long int extraBlocks = rightOpEndPos - leftOpEndPos;
-						unsigned long int  rightGapValue = rightOperand[rightOpIndex];
-						int startBitValue = getStartBitValue(rightGapValue);
+						unsigned long int extraBlocks = _right_op_end_pos - _left_op_end_pos;
+						unsigned long int  rightGapValue = _right_operand[_right_op_index];
+						int startBitValue = GetStartBitValue(rightGapValue);
 						unsigned long int newGapWord = 0;
 						unsigned long int totalBlocks =0;
 						if (startBitValue == ONE_GAP_WORD)
@@ -876,57 +841,57 @@ namespace CompressionSchemes{
 							totalBlocks = rightGapValue - ZERO_GAP_START_FLAG;
 							newGapWord = (totalBlocks - extraBlocks) + ZERO_GAP_START_FLAG;
 						}
-						setValueOnCompressedWord(newGapWord,resultVector);
+						SetValueOnCompressedWord(newGapWord,_result_vector);
 
 					}
 				}
 			}
 		} 
-		else if (type == OR)
+		else if (_type == OR)
 		{
 			// When performing OR operation the initial literal of the left oerand is not written to the compressed
 			//result. This code block performs that. 
-			if (longer == ZERO_GAP & !gapExtensionState)
+			if ((_longer == ZERO_GAP) & !_gap_extension_state)
 			{
 				// 				int rightStartBit = getStartBitValue(rightOperand[rightOpIndex]);
 				// 				if (rightStartBit == LITERAL_WORD)
 				// 				{
-				setValueOnCompressedWord(rightOperand[rightOpIndex],resultVector);
+				SetValueOnCompressedWord(_right_operand[_right_op_index],_result_vector);
 				//				}
 
 
 			}
 
-			while(leftOpEndPos > rightOpEndPos){
-				int startBit = getStartBitValue(rightOperand[++rightOpIndex]);
+			while(_left_op_end_pos > _right_op_end_pos){
+				int startBit = GetStartBitValue(_right_operand[++_right_op_index]);
 				if (startBit == LITERAL_WORD)
 				{
-					rightOpEndPos++;			
+					_right_op_end_pos++;			
 				}else if (startBit == ONE_GAP_WORD)
 				{
-					rightOpEndPos += (rightOperand[rightOpIndex] - ONE_GAP_START_FLAG);			
+					_right_op_end_pos += (_right_operand[_right_op_index] - ONE_GAP_START_FLAG);			
 				}else if (startBit == ZERO_GAP_WORD)
 				{
-					rightOpEndPos += (rightOperand[rightOpIndex] - ZERO_GAP_START_FLAG);			
+					_right_op_end_pos += (_right_operand[_right_op_index] - ZERO_GAP_START_FLAG);			
 				}
-				indexVal = rightOpIndex;
-				opEndPos = rightOpEndPos;	
+				index_val = _right_op_index;
+				op_end_pos = _right_op_end_pos;	
 
-				if (longer == ZERO_GAP)
+				if (_longer == ZERO_GAP)
 				{
 					// In an OR operation when the GAP is zero, corresponding literals in  the other operand(right operand)
 					//should be copied on to the compressed result.
-					if (leftOpEndPos >= rightOpEndPos)
+					if (_left_op_end_pos >= _right_op_end_pos)
 					{
-						setValueOnCompressedWord(rightOperand[rightOpIndex],resultVector);
+						SetValueOnCompressedWord(_right_operand[_right_op_index],_result_vector);
 					}else{
 
 						// If the right operand encounters a gap and extends beyond the left operand this code executes
 						// Even though the right operand extends beyond, the overlapping segment should 
 						//be copied to compressed result as it the performing operation is OR
-						unsigned long int extraBlocks = rightOpEndPos - leftOpEndPos;
-						unsigned long int  rightGapValue = rightOperand[rightOpIndex];
-						int startBitValue = getStartBitValue(rightGapValue);
+						unsigned long int extraBlocks = _right_op_end_pos - _left_op_end_pos;
+						unsigned long int  rightGapValue = _right_operand[_right_op_index];
+						int startBitValue = GetStartBitValue(rightGapValue);
 						unsigned long int newGapWord = 0;
 						unsigned long int totalBlocks =0;
 						if (startBitValue == ONE_GAP_WORD)
@@ -939,19 +904,19 @@ namespace CompressionSchemes{
 							totalBlocks = rightGapValue - ZERO_GAP_START_FLAG;
 							newGapWord = (totalBlocks - extraBlocks) + ZERO_GAP_START_FLAG;
 						}
-						setValueOnCompressedWord(newGapWord,resultVector);
+						SetValueOnCompressedWord(newGapWord,_result_vector);
 
 					}
 				}
 			}
 		}
-		result.push_back(indexVal);
-		result.push_back(opEndPos);
+		result.push_back(index_val);
+		result.push_back(op_end_pos);
 
 		return result;
 	}
 
-	vector<int> WAHStructure::alignLeftWithRight( int rightOpEndPos,int leftOpIndex,int leftOpEndPos,vector<unsigned long int> &leftoperand,vector<unsigned long int> &resultVector, longer_operand longer,operation_type type /*= AND*/,bool gapExtensionState )
+	vector<int> WAHStructure::AlignLeftWithRight( int rightOpEndPos,int leftOpIndex,int leftOpEndPos,vector<unsigned long int> &leftoperand,vector<unsigned long int> &resultVector, longer_operand longer,operation_type type /*= AND*/,bool gapExtensionState )
 	{
 		vector<int> result;
 		int indexVal=0;
@@ -959,19 +924,19 @@ namespace CompressionSchemes{
 
 		if (type == AND)
 		{
-			if (longer == ONE_GAP & !gapExtensionState)
+			if ((longer == ONE_GAP) & !gapExtensionState)
 			{
 				// 				int leftStartBit = getStartBitValue(leftoperand[leftOpIndex]);
 				// 				if (leftStartBit == LITERAL_WORD)
 				// 				{
-				setValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
+				SetValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
 				//}
 
 
 			}
 
 			while(leftOpEndPos < rightOpEndPos){
-				int startBit = getStartBitValue(leftoperand[++leftOpIndex]);
+				int startBit = GetStartBitValue(leftoperand[++leftOpIndex]);
 				if (startBit == LITERAL_WORD)
 				{
 					leftOpEndPos++;
@@ -990,11 +955,11 @@ namespace CompressionSchemes{
 				{
 					if (leftOpEndPos <= rightOpEndPos)
 					{
-						setValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
+						SetValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
 					}else{
 						unsigned long int extraBlocks = leftOpEndPos-rightOpEndPos ;
 						unsigned long int  leftGapValue = leftoperand[leftOpIndex];
-						int startBitValue = getStartBitValue(leftGapValue);
+						int startBitValue = GetStartBitValue(leftGapValue);
 						unsigned long int newGapWord = 0;
 						unsigned long int totalBlocks =0;
 						if (startBitValue == ONE_GAP_WORD)
@@ -1007,7 +972,7 @@ namespace CompressionSchemes{
 							totalBlocks = leftGapValue - ZERO_GAP_START_FLAG;
 							newGapWord = (totalBlocks - extraBlocks) + ZERO_GAP_START_FLAG;
 						}
-						setValueOnCompressedWord(newGapWord,resultVector);
+						SetValueOnCompressedWord(newGapWord,resultVector);
 
 					}
 				}
@@ -1019,18 +984,18 @@ namespace CompressionSchemes{
 		} 
 		else if (type == OR)
 		{
-			if (longer == ZERO_GAP & !gapExtensionState)
+			if ((longer == ZERO_GAP) & !gapExtensionState)
 			{
 // 				int leftStartBit = getStartBitValue(leftoperand[leftOpIndex]);
 // 				if (leftStartBit == LITERAL_WORD)
 // 				{
-					setValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
+					SetValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
 				//}
 
 			}
 
 			while(leftOpEndPos < rightOpEndPos){
-				int startBit = getStartBitValue(leftoperand[++leftOpIndex]);
+				int startBit = GetStartBitValue(leftoperand[++leftOpIndex]);
 				if (startBit == LITERAL_WORD)
 				{
 					leftOpEndPos++;
@@ -1049,11 +1014,11 @@ namespace CompressionSchemes{
 				{
 					if (leftOpEndPos <= rightOpEndPos)
 					{
-						setValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
+						SetValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
 					}else{
 						unsigned long int extraBlocks = leftOpEndPos-rightOpEndPos ;
 						unsigned long int  leftGapValue = leftoperand[leftOpIndex];
-						int startBitValue = getStartBitValue(leftGapValue);
+						int startBitValue = GetStartBitValue(leftGapValue);
 						unsigned long int newGapWord = 0;
 						unsigned long int totalBlocks =0;
 						if (startBitValue == ONE_GAP_WORD)
@@ -1066,7 +1031,7 @@ namespace CompressionSchemes{
 							totalBlocks = leftGapValue - ZERO_GAP_START_FLAG;
 							newGapWord = (totalBlocks - extraBlocks) + ZERO_GAP_START_FLAG;
 						}
-						setValueOnCompressedWord(newGapWord,resultVector);
+						SetValueOnCompressedWord(newGapWord,resultVector);
 
 					}
 				}
@@ -1083,17 +1048,17 @@ namespace CompressionSchemes{
 		return result;
 	}
 
-	int WAHStructure::getStartBitValue(unsigned long int word)
+	int WAHStructure::GetStartBitValue( size_t _word )
 	{
 		int startBitValue= 0;
-		unsigned long int result = word & ZERO_GAP_START_FLAG;
+		unsigned long int result = _word & ZERO_GAP_START_FLAG;
 		if (result == 0)
 		{
 			startBitValue = LITERAL_WORD;
 		}
 		else 
 		{
-			result = word & ONE_GAP_START_FLAG;
+			result = _word & ONE_GAP_START_FLAG;
 			if (result == ZERO_GAP_START_FLAG)
 			{
 				startBitValue = ZERO_GAP_WORD;
@@ -1107,92 +1072,70 @@ namespace CompressionSchemes{
 	} 
 
 	//This method checks the previous word and the current word if possible
-	void WAHStructure::setValueOnCompressedWord(unsigned long int word, vector<unsigned long int> &resultVector)
+	void WAHStructure::SetValueOnCompressedWord( unsigned long int _word, vector<unsigned long int> &_compressed_result )
 	{
-		if (resultVector.size() == 0)
+		if (_compressed_result.size() == 0)
 		{
 
-			resultVector.push_back(word);
+			_compressed_result.push_back(_word);
 
 		}
 		else {
 			unsigned long int lastWord = 0;
 
-			lastWord = resultVector[resultVector.size()-1];
+			lastWord = _compressed_result[_compressed_result.size()-1];
 
 			// Maximum maximum number represented for the value has not been considered yet.
 			// Remember to use it before final version.
 			unsigned long int result = 0;
-			if (word == ZERO_LITERAL && lastWord == ZERO_LITERAL )
+			if (_word == ZERO_LITERAL && lastWord == ZERO_LITERAL )
 			{
-				resultVector[resultVector.size()-1] = ZERO_GAP_START_FLAG | 2;
+				_compressed_result[_compressed_result.size()-1] = ZERO_GAP_START_FLAG | 2;
 			}
-			else if (word == ZERO_LITERAL && getStartBitValue(lastWord) == ZERO_GAP_WORD)
+			else if (_word == ZERO_LITERAL && GetStartBitValue(lastWord) == ZERO_GAP_WORD)
 			{
-				resultVector[resultVector.size()-1] = lastWord + 1;
+				_compressed_result[_compressed_result.size()-1] = lastWord + 1;
 			}
-			else if (word == ONE_LITERAL && lastWord == ONE_LITERAL)
+			else if (_word == ONE_LITERAL && lastWord == ONE_LITERAL)
 			{
-				resultVector[resultVector.size()-1] = ONE_GAP_START_FLAG + 2;
+				_compressed_result[_compressed_result.size()-1] = ONE_GAP_START_FLAG + 2;
 			}
-			else if (word == ONE_LITERAL && getStartBitValue(lastWord) == ONE_GAP_WORD)
+			else if (_word == ONE_LITERAL && GetStartBitValue(lastWord) == ONE_GAP_WORD)
 			{
-				resultVector[resultVector.size()-1] = lastWord + 1;
+				_compressed_result[_compressed_result.size()-1] = lastWord + 1;
 			}
-			else if (getStartBitValue(word) == ONE_GAP_WORD && getStartBitValue(lastWord) == ONE_GAP_WORD)
+			else if (GetStartBitValue(_word) == ONE_GAP_WORD && GetStartBitValue(lastWord) == ONE_GAP_WORD)
 			{
-				resultVector[resultVector.size()-1] = word + lastWord - ONE_GAP_START_FLAG;
+				_compressed_result[_compressed_result.size()-1] = _word + lastWord - ONE_GAP_START_FLAG;
 			}
-			else if(getStartBitValue(word) == ZERO_GAP_WORD && getStartBitValue(lastWord) == ZERO_GAP_WORD)
+			else if(GetStartBitValue(_word) == ZERO_GAP_WORD && GetStartBitValue(lastWord) == ZERO_GAP_WORD)
 			{
-				resultVector[resultVector.size()-1] = word + lastWord - ZERO_GAP_START_FLAG;
+				_compressed_result[_compressed_result.size()-1] = _word + lastWord - ZERO_GAP_START_FLAG;
 			}else
 			{
-				resultVector.push_back(word);
+				_compressed_result.push_back(_word);
 			}
 		}
 	}
 
 
-	void WAHStructure::setCompressedStream(vector<unsigned long int> &x)
+	void WAHStructure::SetCompressedStream(vector<unsigned long int> &x)
 	{
-		compressedStreamVector = x;
+		m_compressed_stream = x;
 	}
 
-	int WAHStructure::getValue(boost::dynamic_bitset<> & bitMap,int startIndex,int offset)
+
+	vector<unsigned long int>& WAHStructure::GetCompressedVector()
 	{
-
-		boost::dynamic_bitset<> temp(offset);
-		for (int i =0; i < offset; i++)
-		{
-			temp[i] = bitMap[startIndex + i];
-		}
-
-		return (int)temp.to_ulong();
-	}
-
-	boost::dynamic_bitset<> WAHStructure::getCompressedWord()
-	{
-		return compressedStream;
-	}
-
-	vector<unsigned long int>& WAHStructure::getCompressedVector()
-	{
-		return compressedStreamVector;
+		return m_compressed_stream;
 	}
 
 	int WAHStructure::getSpaceUtilisation()
 	{
-		int compressedSize  = 0;
-		int active = 0;
-
-		compressedSize = 24 + (int)(compressedStream.size()/8);	
-		active= 4;
-
-		return (active + compressedSize);
+		return 0;
 	}
 
-	dynamic_bitset<> WAHStructure::convertVectorToBitmap(std::vector<unsigned long int> &decompressedVector)
+	dynamic_bitset<> WAHStructure::ConvertVectorToBitmap(std::vector<unsigned long int> &decompressedVector)
 	{
 		int size = decompressedVector.size();
 		dynamic_bitset<> result(size * (WORD_SIZE - 1));
@@ -1209,15 +1152,15 @@ namespace CompressionSchemes{
 	}
 
 
-	vector<unsigned long int> WAHStructure::expandCompressedVector(vector<unsigned long int> & compressedVector)
+	vector<unsigned long int> WAHStructure::ExpandCompressedVector(vector<unsigned long int> & compressedVector)
 	{
 
 		vector<unsigned long int> result;
 		int resultIndex = 0;
-		for (int i = 0 ; i < compressedVector.size() ; i++)
+		for (size_t i = 0 ; i < compressedVector.size() ; i++)
 		{
 			unsigned long int vectorValue = compressedVector[i];
-			int startBit = getStartBitValue(vectorValue);
+			int startBit = GetStartBitValue(vectorValue);
 			if (startBit == LITERAL_WORD)
 			{
 				result.push_back(vectorValue);
@@ -1242,14 +1185,14 @@ namespace CompressionSchemes{
 		return result;
 	}
 
-	dynamic_bitset<> WAHStructure::decompress()
+	dynamic_bitset<> WAHStructure::Decompress()
 	{
-		vector<unsigned long int> result = expandCompressedVector(compressedStreamVector);
-		dynamic_bitset<> resultBitset = convertVectorToBitmap(result);
-		if (activeWordSize > 0)
+		vector<unsigned long int> result = ExpandCompressedVector(m_compressed_stream);
+		dynamic_bitset<> resultBitset = ConvertVectorToBitmap(result);
+		if (m_iActiveWordSize > 0)
 		{
-			dynamic_bitset<> temp(activeWordSize,activeWord);
-			for (int i = 0; i < temp.size() ; i++)
+			dynamic_bitset<> temp(m_iActiveWordSize,m_ulActiveWord);
+			for (size_t i = 0; i < temp.size() ; i++)
 			{
 				resultBitset.push_back(temp[i]);
 			}
@@ -1260,11 +1203,11 @@ namespace CompressionSchemes{
 	WAHStructure * WAHStructure::operator ~(){
 		WAHStructure * result = new WAHStructure();
 		vector<unsigned long int> newCompressedStream;
-		vector<unsigned long int>::iterator vectorIterator  = compressedStreamVector.begin();
-		while(vectorIterator != compressedStreamVector.end())
+		vector<unsigned long int>::iterator vectorIterator  = m_compressed_stream.begin();
+		while(vectorIterator != m_compressed_stream.end())
 		{
 			unsigned long int vectorValue = *(vectorIterator);
-			int startBitValue = getStartBitValue(vectorValue);
+			int startBitValue = GetStartBitValue(vectorValue);
 			if (startBitValue == LITERAL_WORD)
 			{
 				newCompressedStream.push_back((~vectorValue) & ONE_LITERAL);
@@ -1277,12 +1220,12 @@ namespace CompressionSchemes{
 			}
 			vectorIterator++;
 		}
-		result->setCompressedStream(newCompressedStream);
-		result->MainArraySize(mainArraySize);
-		if (activeWordSize > 0)
+		result->SetCompressedStream(newCompressedStream);
+		result->OriginalStreamSize(m_iOriginalStreamSize);
+		if (m_iActiveWordSize > 0)
 		{
-			result->ActiveWordSize(activeWordSize);
-			result->ActiveWord(~activeWord);
+			result->ActiveWordSize(m_iActiveWordSize);
+			result->ActiveWord(~m_ulActiveWord);
 		}
 		return result;
 	}}
