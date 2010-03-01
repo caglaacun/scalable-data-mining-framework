@@ -1,6 +1,6 @@
 #pragma once
 #include "WAHStructure.h"
-namespace CompressionSchemes{
+namespace CompressedStructure{
 	namespace TestStructure{
 		class TestWAHArray
 		{
@@ -9,7 +9,7 @@ namespace CompressionSchemes{
 			enum operation_type{OR,AND};
 			TestWAHArray(void);
 			~TestWAHArray(void);
-			void RunTest(dynamic_bitset<> &leftoperand,dynamic_bitset<> & rightOperand,int TestNo,operation_type type = AND);
+			void RunTest(dynamic_bitset<> &_left_operand,dynamic_bitset<> & _right_operand,int _itest_no,operation_type type = AND);
 			void pureBitTest();
 			void pureBitORTest();
 			void testLeftCompressedRightLiteral();

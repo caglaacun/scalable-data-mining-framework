@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "BitsetGenerator.h"
 #include <iostream>
-namespace CompressionSchemes{
+namespace CompressedStructure{
 	namespace TestStructure{
 		BitsetGenerator::BitsetGenerator(void)
 		{
@@ -24,7 +24,7 @@ namespace CompressionSchemes{
 		dynamic_bitset<> BitsetGenerator::getAlternatingBitset(int length)
 		{
 			dynamic_bitset<> result(length);
-			for (int i=0 ; i < result.size(); i++)
+			for (size_t i=0 ; i < result.size(); i++)
 			{
 				if (i%2 == 0)
 				{
@@ -34,10 +34,10 @@ namespace CompressionSchemes{
 			return result;
 		}
 
-		dynamic_bitset<> BitsetGenerator::getMiddleAlternatingBitset(int length, int alternatingStart, int span, bool nonAlternatingPart)
+		dynamic_bitset<> BitsetGenerator::getMiddleAlternatingBitset( size_t length,size_t alternatingStart,size_t span,bool nonAlternatingPart )
 		{
 			dynamic_bitset<> result(length);
-			for (int i = 0; i < result.size() ; i++)
+			for (size_t i = 0; i < result.size() ; i++)
 			{
 				if ( i < alternatingStart)
 				{
@@ -59,10 +59,10 @@ namespace CompressionSchemes{
 			return result;
 		}
 
-		dynamic_bitset<> BitsetGenerator::getMiddleCompressedBitset(int length, int compressedStart, int span, bool compressedType)
+		dynamic_bitset<> BitsetGenerator::getMiddleCompressedBitset( size_t length,size_t compressedStart,size_t span,bool compressedType )
 		{
 			dynamic_bitset<> result(length);
-			for(int i =0; i < result.size(); i++)
+			for(size_t i =0; i < result.size(); i++)
 			{
 				if (i < compressedStart)
 				{
@@ -91,11 +91,23 @@ namespace CompressionSchemes{
 		dynamic_bitset<> BitsetGenerator::getRandomBitStream(int length,int onePercent)
 		{
 			dynamic_bitset<> result(length);
-			vector<int> oneVector = getOneBitPositions(length,onePercent);
-			for (int i=0; i < oneVector.size(); i++)
+			if (onePercent <= 50)
 			{
-				result[oneVector[i]] = 1;
+				vector<int> oneVector = getOneBitPositions(length,onePercent);
+				for (size_t i=0; i < oneVector.size(); i++)
+				{
+					result[oneVector[i]] = 1;
+				}
+			}else
+			{
+				vector<int> oneVector = getOneBitPositions(length,(100 - onePercent));
+				result.flip();
+				for (size_t i=0; i < oneVector.size(); i++)
+				{
+					result[oneVector[i]] = 0;
+				}
 			}
+			
 
 			return result;
 		}
@@ -103,6 +115,7 @@ namespace CompressionSchemes{
 		vector<int> BitsetGenerator::getOneBitPositions(int length, int onePercent)
 		{
 			vector<int> result;
+			
 			int trueBitNumber = (onePercent * length)/100;
 			int i = 0;
 			while(i < trueBitNumber)

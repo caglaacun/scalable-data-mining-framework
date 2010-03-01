@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			>
 			<Tool
@@ -41,13 +41,15 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\MyDocuments\University\L4\Project\Boost\boost_1_33_0"
+				AdditionalIncludeDirectories="$(BOOST_HOME)"
+				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -203,6 +205,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\TimeTest.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\WAHArray.cpp"
 					>
 				</File>
@@ -238,6 +244,10 @@
 				</File>
 				<File
 					RelativePath=".\TestWAHArray.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TimeTest.h"
 					>
 				</File>
 			</Filter>

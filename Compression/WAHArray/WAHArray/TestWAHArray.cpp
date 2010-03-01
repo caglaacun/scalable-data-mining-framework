@@ -3,7 +3,7 @@
 #include "BitsetGenerator.h"
 #include <vector>
 #include <iostream>
-namespace CompressionSchemes{
+namespace CompressedStructure{
 	namespace TestStructure{
 		TestWAHArray::TestWAHArray(void)
 		{
@@ -22,10 +22,10 @@ namespace CompressionSchemes{
 			WAHStructure * st = new WAHStructure();
 			cout << "Original Bitset : " <<bitSet <<endl;
 			//st->buildArray(bitSet);
-			st->compressWords(bitSet);
+			st->CompressWords(bitSet);
 			cout << "Compressed Words : " << endl;
 			st->printCompressedStream();
-			dynamic_bitset<> bitSet2 = st->decompress();
+			dynamic_bitset<> bitSet2 = st->Decompress();
 			cout << "decompressed Structure  : " << bitSet2<<endl;
 			bitSet2 = bitSet & bitSet2;
 			cout << "Count : " << bitSet2.to_ulong() << endl;
@@ -47,8 +47,8 @@ namespace CompressionSchemes{
 			WAHStructure * right = new WAHStructure();
 			//left->buildArray(leftOp);
 			//right->buildArray(rightOp);
-			left->compressWords(leftOp);
-			right->compressWords(rightOp);
+			left->CompressWords(leftOp);
+			right->CompressWords(rightOp);
 			cout << "Compressed Word left : "<< endl;
 			left->printCompressedStream();
 			cout << ""<< endl;
@@ -65,7 +65,7 @@ namespace CompressionSchemes{
 			}
 			cout << "Result : " << endl;
 			result->printCompressedStream();
-			dynamic_bitset<> decompressedResult = result->decompress();
+			dynamic_bitset<> decompressedResult = result->Decompress();
 			//dynamic_bitset<> testAbleBitmap = resultBitMap & decompressedResult;
 			bool state = (resultBitMap == decompressedResult);			
 			assert(state);
@@ -81,10 +81,10 @@ namespace CompressionSchemes{
 			cout << "original Bitmap : " << temp << endl;
 
 			//ws->buildArray(temp1);
-			ws->compressWords(temp1);
+			ws->CompressWords(temp1);
 			ws->printCompressedStream();	
 
-			dynamic_bitset<> decoded = ws->decompress();
+			dynamic_bitset<> decoded = ws->Decompress();
 			if (decoded == temp)
 			{
 				cout << "Decompress Success" << endl;
@@ -607,8 +607,8 @@ namespace CompressionSchemes{
 			cout << "Test No : " << TestNo << endl;
 			WAHStructure * leftOp = new WAHStructure();
 			WAHStructure * rightOp = new WAHStructure();
-			leftOp->compressWords(leftoperand);
-			rightOp->compressWords(rightOperand);
+			leftOp->CompressWords(leftoperand);
+			rightOp->CompressWords(rightOperand);
 			cout << "Print Left Compressed Stream : " << endl;
 			leftOp->printCompressedStream();
 			cout << "print Right Compressed Stream : " << endl;
@@ -669,8 +669,8 @@ namespace CompressionSchemes{
 		{
 			WAHStructure ws;
 			unsigned long long count = (unsigned long long)bitSet.count();
-			ws.compressWords(bitSet);
-			unsigned long long countCompressed = ws.count();
+			ws.CompressWords(bitSet);
+			unsigned long long countCompressed = ws.Count();
 			cout << "Bitset count : " << count << endl;
 			cout << "Compressed word count" << countCompressed<<endl;
 			assert(countCompressed == count);
@@ -683,7 +683,7 @@ namespace CompressionSchemes{
 			dynamic_bitset<> comp = bitset;
 			cout << "Original Stream : " << bitset << endl;
 			cout << "Original Compressed Stream : " <<endl;
-			ws->compressWords(comp);
+			ws->CompressWords(comp);
 			ws->printCompressedStream();
 			bitset.flip();
 			cout <<"Complement Bitstream : " << bitset << endl;
@@ -692,7 +692,7 @@ namespace CompressionSchemes{
 			cout << "Complement of the structure" << endl;
 			ws2->printCompressedStream();
 			cout << "Starting to decompress " << endl;
-			dynamic_bitset<> decom = ws2->decompress();
+			dynamic_bitset<> decom = ws2->Decompress();
 			cout << "Decompressed negation : " << decom << endl;
 			assert(decom == bitset);
 			return true;
@@ -710,12 +710,12 @@ namespace CompressionSchemes{
 				it++;
 				WAHStructure  * ws = new WAHStructure();
 				cout << "Original Bit Stream : " << temp << endl;
-				ws->compressWords(temp);
+				ws->CompressWords(temp);
 				cout << "Compressed Words : " << endl;
 				ws->printCompressedStream();
 				ws = ~(*(ws));
 				tempClone.flip();
-				dynamic_bitset<> t2 = ws->decompress();
+				dynamic_bitset<> t2 = ws->Decompress();
 				cout << "Decompressed Stream : " << t2 << endl;
 				assert(t2 == tempClone);
 			}
@@ -732,9 +732,9 @@ namespace CompressionSchemes{
 			dynamic_bitset<> st2 =  bg.buildFromString(str2);
 
 			WAHStructure  * ws2 = new WAHStructure();
-			ws2->compressWords(st1);
+			ws2->CompressWords(st1);
 			WAHStructure  * ws1 = new WAHStructure();
-			ws1->compressWords(st2);
+			ws1->CompressWords(st2);
 
 			WAHStructure * result = new WAHStructure();
 			result = *(ws2) | *(ws1);
