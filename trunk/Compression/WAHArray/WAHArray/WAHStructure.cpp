@@ -806,14 +806,14 @@ namespace CompressedStructure{
 			}
 
 			while(_left_op_end_pos > _right_op_end_pos){
-				int startBit = GetStartBitValue(_right_operand[++_right_op_index]);
-				if (startBit == LITERAL_WORD)
+				int start_bit = GetStartBitValue(_right_operand[++_right_op_index]);
+				if (start_bit == LITERAL_WORD)
 				{
 					_right_op_end_pos++;			
-				}else if (startBit == ONE_GAP_WORD)
+				}else if (start_bit == ONE_GAP_WORD)
 				{
 					_right_op_end_pos += (_right_operand[_right_op_index] - ONE_GAP_START_FLAG);			
-				}else if (startBit == ZERO_GAP_WORD)
+				}else if (start_bit == ZERO_GAP_WORD)
 				{
 					_right_op_end_pos += (_right_operand[_right_op_index] - ZERO_GAP_START_FLAG);			
 				}
@@ -826,22 +826,22 @@ namespace CompressedStructure{
 					{
 						SetValueOnCompressedWord(_right_operand[_right_op_index],_result_vector);
 					}else{
-						unsigned long int extraBlocks = _right_op_end_pos - _left_op_end_pos;
-						unsigned long int  rightGapValue = _right_operand[_right_op_index];
-						int startBitValue = GetStartBitValue(rightGapValue);
-						unsigned long int newGapWord = 0;
+						unsigned long int extra_blocks = _right_op_end_pos - _left_op_end_pos;
+						unsigned long int  right_gap_value = _right_operand[_right_op_index];
+						int startBitValue = GetStartBitValue(right_gap_value);
+						unsigned long int new_gap_word = 0;
 						unsigned long int totalBlocks =0;
 						if (startBitValue == ONE_GAP_WORD)
 						{
-							totalBlocks = rightGapValue - ONE_GAP_START_FLAG;
-							newGapWord = (totalBlocks - extraBlocks) + ONE_GAP_START_FLAG;
+							totalBlocks = right_gap_value - ONE_GAP_START_FLAG;
+							new_gap_word = (totalBlocks - extra_blocks) + ONE_GAP_START_FLAG;
 
 						}else if (startBitValue == ZERO_GAP_WORD)
 						{
-							totalBlocks = rightGapValue - ZERO_GAP_START_FLAG;
-							newGapWord = (totalBlocks - extraBlocks) + ZERO_GAP_START_FLAG;
+							totalBlocks = right_gap_value - ZERO_GAP_START_FLAG;
+							new_gap_word = (totalBlocks - extra_blocks) + ZERO_GAP_START_FLAG;
 						}
-						SetValueOnCompressedWord(newGapWord,_result_vector);
+						SetValueOnCompressedWord(new_gap_word,_result_vector);
 
 					}
 				}
