@@ -8,12 +8,6 @@ namespace DBConnectionInfo{
 		this->_DSN_Name = DSN_Name;
 		this->_DB_UID = DB_UID;
 		this->_DB_PWD = DB_PWD;
-// 		this->_DB_Connection_String = "DSN = ";
-// 		this->_DB_Connection_String = strcpy(this->_DB_Connection_String,this->_DSN_Name);
-// 		this->_DB_Connection_String = strcat(this->_DB_Connection_String,"; UID = ");
-// 		this->_DB_Connection_String = strcat(this->_DB_Connection_String,this->_DB_UID);
-// 		this->_DB_Connection_String = strcat(this->_DB_Connection_String,"; PWD = ");
-// 		this->_DB_Connection_String = strcat(this->_DB_Connection_String,this->_DB_PWD);
 	}
 
 	DBConnectionInfo::DBConnection::DBConnection(char* DB_Connection_String){
@@ -34,8 +28,10 @@ namespace DBConnectionInfo{
 			
 			return true;
 		}
-		catch(CGOdbcEx &ex)
+		catch(CGOdbcEx *e)
 		{
+			std::cerr<<"Error in connecting to database: Possible error in DSN or database authentication info"<<std::endl;
+			exit(1);
 			//TODO add logging method to record error condition.
 			return false;			
 		}
@@ -47,8 +43,10 @@ namespace DBConnectionInfo{
 			this->_dbConPtr.close();
 			return true;
 		}
-		catch(std::exception &ex){
+		catch(CGOdbcEx *ex){
 			//TODO add logging method to record error condition.
+			std::cerr<<"Error in closing connection to Database."<<std::endl;
+			exit(4);
 			return false;
 		}
 	}

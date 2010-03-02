@@ -31,11 +31,6 @@ void EncodedMultiCatAttribute::mapStringDataToCategories(string* _valueList,vect
 	MultiCatDataInfo *df = new MultiCatDataInfo(_uniqueValList);
 	this->_mappedIntVals = df->getAssignedEncodedNumberList();
 	
-// 	for (int j = 0 ; j < this->NoOfVBitStreams() ; j++)
-// 	{
-// 		this->vBitStreams()[j] = new VBitStream(noOfRows);
-// 	}
-
 	for (int i = 0 ; i < noOfRows ; i++)
 	{
 		int pos = std::find(_uniqueValList.begin(),_uniqueValList.end(),_valueList[i]) - _uniqueValList.begin();
@@ -60,10 +55,10 @@ string EncodedMultiCatAttribute::decodeTheTuple(int tupleID){
 
 	for (int i=0 ; i < this->NoOfVBitStreams() ;i++)
 	{
-		temp[i] = this->vBitStreams()[i]->getProcessedBitStream()[tupleID - 1];
+		temp[i] = this->vBitStreams().at(i)->getProcessedBitStream()[tupleID - 1];
 	}
 
 	val = (int)temp.to_ulong();
 	
-	return this->_uniqueValList[val];
+	return this->_uniqueValList.at(val);
 }
