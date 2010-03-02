@@ -17,14 +17,14 @@ using namespace DBQueryExecutionInfo;
 int _tmain(int argc, _TCHAR* argv[])
 {
 	//Testing the Library for initializing and connecting to the database.
-	DBConnection cCon("AdventureWorks","","");
+	DBConnection cCon("ShoppingCart","","");
 	if (cCon.initiateConnectionToDB())
 	{
 		cout<<"successfully connected"<<endl;
 	}
 	
 	//Testing the Library for executing query statements and binding data.
-	const char* statement="select TOP(5) GeographyKey,BusinessType from DimReseller";
+	const char* statement="select stock from books";
 	DBQueryExecution cExec(statement);
 	if ((cExec.ExecuteQueryAndBindData(cCon.DBConnectionPtr())))
 	{
@@ -115,7 +115,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				//Testing the method for retrieving a bit stream on given index.
 				//VBitStream* vBitStream = intAtt->bitStreamAt(2);
 
-				BitStreamInfo* vBitStream = (*intAtt)(1);
+				BitStreamInfo* vBitStream = (*intAtt)(0);
 				cout << vBitStream->getProcessedBitStream()<<endl;
 
 				//Decode a particular tuple upon given a tuple ID.

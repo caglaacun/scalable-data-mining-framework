@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "EncodedAttributeInfo.h"
 #include "BitStreamInfo.h"
+#include <iostream>
+
+using namespace std;
 
 EncodedAttributeInfo::EncodedAttributeInfo(){
 
@@ -31,11 +34,17 @@ int EncodedAttributeInfo::NoOfVBitStreams(){
 }
 
 BitStreamInfo* EncodedAttributeInfo::bitStreamAt(int bitStreamID){
-	return this->_vBitStreams[bitStreamID];
+	return this->_vBitStreams.at(bitStreamID);
 }
 
 BitStreamInfo* EncodedAttributeInfo::operator ()(const int bitStreamID){
-	return this->bitStreamAt(bitStreamID);
+	try{
+		return this->bitStreamAt(bitStreamID);
+	}
+	catch(std::exception &e){
+		std::cerr<<"Error in retrieving bit stream : "<<e.what()<<endl;
+		exit(0);
+	}
 }
 
 void EncodedAttributeInfo::setVBitStreamSize(int newSize){
@@ -56,12 +65,18 @@ void EncodedAttributeInfo::setAttType(ATT_TYPE type){
 }
 
 void EncodedAttributeInfo::setNoOfVBitStreams(int novBitsets, int rows){
-	this->_noOfVBitStreams = novBitsets;
-	this->_vBitStreams.resize(this->_noOfVBitStreams);
+	try{
+		this->_noOfVBitStreams = novBitsets;
+		this->_vBitStreams.resize(this->_noOfVBitStreams);
 
-	for (int i = 0 ; i <novBitsets ; i++)
-	{
-		this->_vBitStreams[i] = new VBitStream(rows);
+		for (int i = 0 ; i < novBitsets ; i++)
+		{
+			this->_vBitStreams.at(i) = new VBitStream(rows);
+		}
+	}
+	catch(std::exception &e){
+		cerr<<"Error in creating vertical bit streams for a given # of bit stream"<<endl;
+		exit(5);
 	}
 }
 

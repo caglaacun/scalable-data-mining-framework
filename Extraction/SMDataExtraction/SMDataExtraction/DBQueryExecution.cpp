@@ -6,12 +6,14 @@
 #include "PureDoubleAttInfo.h"
 #include "PureStringAttInfo.h"
 #include "attributetype.h"
+#include "SMException.h"
 
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <cstdlib>
 #include <stdlib.h>
+#include <iostream>
 using namespace std;
 
 
@@ -24,9 +26,15 @@ namespace DBQueryExecutionInfo{
 
 	bool DBQueryExecutionInfo::DBQueryExecution::ExecuteQueryAndBindData(CGOdbcConnect cCon){
 		try{
-			this->_stmtPtr = cCon.createStatement();
-			this->_stmtPtr->execute(this->_query_stmt);
-			this->_stmtPtr->bindAuto();
+			try{
+				this->_stmtPtr = cCon.createStatement();
+				this->_stmtPtr->execute(this->_query_stmt);
+				this->_stmtPtr->bindAuto();
+			}
+			catch(CGOdbcEx *e){
+				cerr<<"Error in executing the query Specified : Possible error in query parsing"<<endl;
+				exit(2);
+			}
 
 			CGOdbcStmt *pCur= this->_stmtPtr;
 			bool BRC;

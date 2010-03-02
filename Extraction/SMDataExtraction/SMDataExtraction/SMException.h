@@ -1,5 +1,6 @@
 #include "stdhead.h"
-class CGOdbcEx{
+#include <stdexcept>
+class CGOdbcEx : public std::exception{
 public:
 	typedef enum
 	{
