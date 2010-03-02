@@ -12,9 +12,11 @@ void main()
 {
 	try
 	{
-		Query* q=new Query("!id[1,2]&!id[1,2]");
 		Olap olap;
+
+		Query* q=new Query("!id[1,2]&!id[1,2]");
 		cout<<"count:"<<olap.count(q)<<endl;
+		delete q;//remove garbage
 	}
 	catch(exception& e)
 	{
