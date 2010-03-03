@@ -1,0 +1,88 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer>
+      <setting name="UsedSolutionBuilderID">0</setting>
+    </integer>
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:PureDoubleAttInfo.h" caret="448" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:PureAttInfo.h" caret="0" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:stdhead.h" caret="0" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DBConnection.cpp" caret="983" scrollPosition="0|17" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:dllmain.cpp" caret="335" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:PureStringAttInfo.h" caret="279" scrollPosition="0|6" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:PureIntAttInfo.h" caret="0" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:AttributeType.h" caret="291" scrollPosition="0|3" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DecodedTuple.h" caret="380" scrollPosition="0|6" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:EncodedAttributeInfo.h" caret="615" scrollPosition="0|12" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:EncodedMultiCatAttribute.h" caret="179" scrollPosition="0|6" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:EncodedMultiCatAttribute.cpp" caret="1153" scrollPosition="0|24" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:EncodedIntAttribute.h" caret="412" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:EncodedIntAttribute.cpp" caret="210" scrollPosition="0|15" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:EncodedAttributeInfo.cpp" caret="1607" scrollPosition="0|53" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:VBitStream.h" caret="400" scrollPosition="0|38" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:VBitStream.cpp" caret="1631" scrollPosition="0|117" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:BitStreamInfo.h" caret="100" scrollPosition="0|27" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:BitStreamInfo.cpp" caret="363" scrollPosition="0|12" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DBQueryExecution.cpp" caret="6933" scrollPosition="0|227" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DBQueryExecution.h" caret="1217" scrollPosition="0|15" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DataSources.h" caret="343" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:WrapDataSource.h" caret="353" scrollPosition="0|9" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DBConnection.h" caret="354" scrollPosition="0|12" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:SMException.h" caret="239" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:SMException.cpp" caret="517" scrollPosition="0|18" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:WrapDataSource.cpp" caret="2356" scrollPosition="0|62" />
+      <File id="d:Miscellaneous Files/f:stdthrow.cpp" caret="698" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DataSources.cpp" caret="623" scrollPosition="0|18" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="2653" scrollPosition="0|74" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:BitStreamInfo.cpp" caret="258" scrollPosition="0|3" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:VBitStream.h" caret="2240" scrollPosition="0|30" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:VBitStream.h" caret="2239" scrollPosition="0|30" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:VBitStream.cpp" caret="1477" scrollPosition="0|63" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:VBitStream.cpp" caret="1474" scrollPosition="0|71" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:VBitStream.cpp" caret="44" scrollPosition="0|0" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:VBitStream.cpp" caret="1701" scrollPosition="0|84" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="5946" scrollPosition="0|145" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="3785" scrollPosition="0|93" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="4037" scrollPosition="0|99" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="4881" scrollPosition="0|123" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="5258" scrollPosition="0|129" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="5660" scrollPosition="0|151" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="3096" scrollPosition="0|75" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="5660" scrollPosition="0|153" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="6412" scrollPosition="0|200" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="6400" scrollPosition="0|187" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="6400" scrollPosition="0|175" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="6400" scrollPosition="6|197" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:WrapDataSource.h" caret="981" scrollPosition="0|12" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:WrapDataSource.h" caret="1367" scrollPosition="0|18" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:WrapDataSource.h" caret="353" scrollPosition="0|9" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:WrapDataSource.cpp" caret="368" scrollPosition="0|6" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:WrapDataSource.cpp" caret="612" scrollPosition="0|6" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DataSources.h" caret="343" scrollPosition="0|0" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="283" scrollPosition="0|0" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="6415" scrollPosition="0|171" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DataSources.cpp" caret="45" scrollPosition="0|18" />
+      <File id="50979506-563B-4551-BD67-ADE0C594AC71/f:DataSources.cpp" caret="549" scrollPosition="0|18" />
+      <File id="244D1DE1-5CF1-4083-8A87-8A65E59D2077/f:TestSMDataExtraction.cpp" caret="2718" scrollPosition="0|74" />
+    </RecentEdits>
+  </RecentFiles>
+  <UnitTestRunner>
+    <CustomStartDirectory>
+    </CustomStartDirectory>
+    <UseShadowCopy>True</UseShadowCopy>
+    <UseCustomFolder>False</UseCustomFolder>
+    <EnableUnitTesting>True</EnableUnitTesting>
+    <Providers />
+  </UnitTestRunner>
+</Configuration>
