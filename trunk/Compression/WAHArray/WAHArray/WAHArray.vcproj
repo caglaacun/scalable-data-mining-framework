@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(BOOST_HOME)"
+				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\Amila\Desktop\SeedMiner\scalable-data-mining-framework\Extraction\SMDataExtraction\Include&quot;;&quot;$(BOOST_HOME)&quot;;&quot;C:\Documents and Settings\Amila\Desktop\SeedMiner\scalable-data-mining-framework\Extraction\SMDataExtraction\SMDataExtraction&quot;"
 				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
@@ -64,6 +64,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;C:\Documents and Settings\Amila\Desktop\SeedMiner\scalable-data-mining-framework\Extraction\SMDataExtraction\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -166,6 +167,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{50979506-563B-4551-BD67-ADE0C594AC71}"
+			RelativePathToProject=".\SMDataExtraction\SMDataExtraction.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -178,6 +183,10 @@
 				>
 				<File
 					RelativePath=".\BitsetGenerator.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\BitStreamInforTest.cpp"
 					>
 				</File>
 				<File
@@ -232,6 +241,10 @@
 				>
 				<File
 					RelativePath=".\BitsetGenerator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\BitStreamInforTest.h"
 					>
 				</File>
 				<File

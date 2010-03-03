@@ -1,33 +1,41 @@
 #pragma once
 #include "boost/dynamic_bitset/dynamic_bitset.hpp"
 #include "Math.h"
+#include "BitStreamInfo.h"
 #include <vector>
+#include "Math.h"
+#include <iostream>
 
 using namespace std;
 using namespace  boost;
 namespace CompressedStructure{
-	class WAHStructure
+	class WAHStructure:public BitStreamInfo
 	{
 
 	public:
-
 		WAHStructure(void);	
 		~WAHStructure(void);	
-		void CompressWords(boost::dynamic_bitset<>& _bit_map);
-		void PrintCompressedStream();
+		
+		//Methods inherited from BitstreamInfo class		
+		void CompressWords(boost::dynamic_bitset<>& _bit_map);		
+		dynamic_bitset<> Decompress();				
+		int GetSpaceUtilisation();
+		BitStreamInfo* operator~();
+		virtual BitStreamInfo* operator &(BitStreamInfo &);
+		BitStreamInfo* operator |(BitStreamInfo &);
+
+		
+		// Overloaded operators
+	
+		WAHStructure * operator & (WAHStructure&);
+		WAHStructure * operator |(WAHStructure & _structure);
+
+		//Methods not exposed to public interface but used among the structures	
+	
 		void SetCompressedStream(vector<unsigned long int> &_compressed_vector);			
 		void printCompressedStream();
 		vector<unsigned long int>& GetCompressedVector();
-		dynamic_bitset<> Decompress();				
 		unsigned long int GetOriginalStreamLength();
-		int getSpaceUtilisation();
-		// Overloaded operators
-
-		WAHStructure * operator~();
-		WAHStructure * operator & (WAHStructure&);
-		WAHStructure * operator |(WAHStructure & _structure);
-		//WAHStructure * WAHStructure::operator | (WAHStructure&);		
-		
 
 		//Public Getters and setters
 		const unsigned long int ActiveWordSize() const { return m_iActiveWordSize; }
@@ -36,9 +44,11 @@ namespace CompressedStructure{
 		void ActiveWord(unsigned long int val) { m_ulActiveWord = val; }
 		int OriginalStreamSize() const { return m_iOriginalStreamSize; }
 		void OriginalStreamSize(unsigned long int val) { m_iOriginalStreamSize = val; }
-		unsigned long long Count();
-		
+		unsigned long long Count();		
 
+		enum operation_type {AND,OR};
+
+		//Constants
 		static const unsigned long int ZERO_LITERAL = 0;
 		static const unsigned long int ONE_LITERAL = 2147483647;
 		static const unsigned long int ONE_GAP_START_FLAG = 3221225472;
@@ -46,9 +56,7 @@ namespace CompressedStructure{
 		static const int LITERAL_WORD = 0;
 		static const int ZERO_GAP_WORD = 1;
 		static const int ONE_GAP_WORD = 2;
-		enum operation_type {AND,OR};
-
-
+		
 
 	private:
 
@@ -67,6 +75,7 @@ namespace CompressedStructure{
 		unsigned long int GetLiteralCount(unsigned long int &_bit_literal);
 	
 
+		//Private Attributes
 		vector<unsigned long int> m_compressed_stream;	
 		int * m_iMainArray;
 		unsigned long int m_iOriginalStreamSize;			
