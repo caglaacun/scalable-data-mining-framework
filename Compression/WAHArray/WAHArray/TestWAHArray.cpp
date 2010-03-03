@@ -679,7 +679,7 @@ namespace CompressedStructure{
 
 		bool TestWAHArray::complementAccuracy(dynamic_bitset<> & bitset)
 		{
-			WAHStructure * ws = new WAHStructure();
+			/*WAHStructure * ws = new WAHStructure();
 			dynamic_bitset<> comp = bitset;
 			cout << "Original Stream : " << bitset << endl;
 			cout << "Original Compressed Stream : " <<endl;
@@ -694,13 +694,13 @@ namespace CompressedStructure{
 			cout << "Starting to decompress " << endl;
 			dynamic_bitset<> decom = ws2->Decompress();
 			cout << "Decompressed negation : " << decom << endl;
-			assert(decom == bitset);
+			assert(decom == bitset);*/
 			return true;
 		}
 
 		void TestWAHArray::testComplementStrings(vector<string> & stringColl)
 		{
-			BitsetGenerator bg;
+			/*BitsetGenerator bg;
 
 			vector<string>::iterator it = stringColl.begin();
 			while(it != stringColl.end())
@@ -718,7 +718,7 @@ namespace CompressedStructure{
 				dynamic_bitset<> t2 = ws->Decompress();
 				cout << "Decompressed Stream : " << t2 << endl;
 				assert(t2 == tempClone);
-			}
+			}*/
 		}
 
 		void TestWAHArray::failedCases()

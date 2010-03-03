@@ -9,25 +9,76 @@
 #include <algorithm>
 #include <string>
 #include "TimeTest.h"
-
+#include "DBQueryExecution.h"
+#include "VBitStream.h"
+#include "BitStreamInfo.h"
+#include "bitstreaminfortest.h"
+#include "DBConnection.h"
 
 using namespace std;
 using namespace boost;
-using namespace boost::detail::dynamic_bitset_count_impl;
 using namespace  boost::detail;
 using namespace CompressedStructure::TestStructure;
 using namespace CompressedStructure;
+using namespace DBConnectionInfo;
+using namespace DBQueryExecutionInfo;
 void randomBitStreamTester();
-
-
+void WAHStructureBecnhmarkAND();
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-TestWAHArray test;
-test.OperatorTest();
+	//Testing the Library for initializing and connecting to the database.
+	DBConnection cCon("CPU","","");
+	if (cCon.initiateConnectionToDB())
+	{
+		cout<<"successfully connected"<<endl;
+	}
 
+	//Testing the Library for executing query statements and binding data.
+	const char* statement="SELECT  precip	FROM   `soybeanTest2.csv`";
+	DBQueryExecution cExec(statement);
+	if ((cExec.ExecuteQueryAndBindData(cCon.DBConnectionPtr())))
+	{
+		cout<<endl<<"Query executed & Fetched successfully"<<endl;
+	}
+
+	//Testing the retrieved Integer data.
+	vector<PureIntAttInfo*> retrievedIntData = cExec.RetievedIntData();
+	int i;
+	int j;
+	for (i=0 ; i<retrievedIntData.size() ; i++)
+	{
+		for (j=0 ; j<cExec.RowCount() ; j++)
+		{
+			cout<<retrievedIntData[i]->ValueList()[j]<<endl;
+		}	
+		cout<<"Max Value of " << retrievedIntData[i]->attName<< " : " << retrievedIntData[i]->Upper()<<endl; 
+		cout<<"Min Value of " << retrievedIntData[i]->attName<< " : " << retrievedIntData[i]->Lower()<<endl;
+
+	}
+
+	//Testing the retrieved Double data.
+	/*vector<PureDoubleAttInfo*>  retrievedDoubleData = cExec.RetrievedDoubleData();
+
+	for (i=0 ; i<retrievedDoubleData.size() ; i++)
+	{
+		for (j=0 ; j<cExec.RowCount() ; j++)
+		{
+			cout<<retrievedDoubleData[i]->ValueList()[j]<<endl;
+		}
+		cout<<"Max Value of " << retrievedDoubleData[i]->attName <<" : " << retrievedDoubleData[i]->Upper()<<endl;
+		cout<<"Min Value of " << retrievedDoubleData[i]->attName <<" : " << retrievedDoubleData[i]->Lower()<<endl;
+	}
+	*/
 return 0;
+}
+
+
+void WAHStructureBecnhmarkAND()
+{
+	TimeTest test;
+	test.RunAndTest(0,500,100);
 }
 
 

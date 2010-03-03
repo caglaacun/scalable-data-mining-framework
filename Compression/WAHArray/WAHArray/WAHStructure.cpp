@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "WAHStructure.h"
-#include "Math.h"
-#include <iostream>
+
 using namespace std;
 namespace CompressedStructure{
 	WAHStructure::WAHStructure(void)
@@ -90,7 +89,7 @@ namespace CompressedStructure{
 		return result;
 	}
 
-	
+
 	void WAHStructure::CompressWords( boost::dynamic_bitset<>& _bit_map )
 	{	
 		size_t i = 0;
@@ -197,14 +196,6 @@ namespace CompressedStructure{
 		_compressed.push_back(_literal_val);
 	}
 
-	void WAHStructure::PrintCompressedStream()
-	{	
-		for (size_t i = 0; i < m_compressed_stream.size(); i++)
-		{
-			cout << "Index  "<<i<<":"<<m_compressed_stream[i] << endl;
-		}	
-	}
-
 	void WAHStructure::printCompressedStream()
 	{
 		if (&m_compressed_stream != NULL && m_compressed_stream.size() > 0)
@@ -238,7 +229,21 @@ namespace CompressedStructure{
 			_bitmap[bitmap_start_index++] = temp[i];		
 		}
 	}
-	
+
+	BitStreamInfo * WAHStructure::operator &(BitStreamInfo & _structure)
+	{
+		WAHStructure * p_left_operand = dynamic_cast<WAHStructure *>(this);
+		WAHStructure * p_right_operand = dynamic_cast<WAHStructure *>(&_structure);		
+		return *(p_left_operand) & *(p_right_operand);
+	}
+
+	BitStreamInfo * WAHStructure::operator |(BitStreamInfo & _base_structure)
+	{
+		WAHStructure * p_left_operand = dynamic_cast<WAHStructure *>(this);
+		WAHStructure * p_right_operand = dynamic_cast<WAHStructure *>(&_base_structure);		
+		return *(p_left_operand) | *(p_right_operand);
+	}
+
 	WAHStructure * WAHStructure::operator &(WAHStructure & _structure)
 	{
 		int compressed_stream_length = m_iOriginalStreamSize;
@@ -986,10 +991,10 @@ namespace CompressedStructure{
 		{
 			if ((longer == ZERO_GAP) & !gapExtensionState)
 			{
-// 				int leftStartBit = getStartBitValue(leftoperand[leftOpIndex]);
-// 				if (leftStartBit == LITERAL_WORD)
-// 				{
-					SetValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
+				// 				int leftStartBit = getStartBitValue(leftoperand[leftOpIndex]);
+				// 				if (leftStartBit == LITERAL_WORD)
+				// 				{
+				SetValueOnCompressedWord(leftoperand[leftOpIndex],resultVector);
 				//}
 
 			}
@@ -1130,7 +1135,7 @@ namespace CompressedStructure{
 		return m_compressed_stream;
 	}
 
-	int WAHStructure::getSpaceUtilisation()
+	int WAHStructure::GetSpaceUtilisation()
 	{
 		return 0;
 	}
@@ -1200,11 +1205,42 @@ namespace CompressedStructure{
 		return resultBitset;
 	}
 
-	WAHStructure * WAHStructure::operator ~(){
+	/*WAHStructure * WAHStructure::operator ~(){
+	WAHStructure * result = new WAHStructure();
+	vector<unsigned long int> newCompressedStream;
+	vector<unsigned long int>::iterator vectorIterator  = m_compressed_stream.begin();
+	while(vectorIterator != m_compressed_stream.end())
+	{
+	unsigned long int vectorValue = *(vectorIterator);
+	int startBitValue = GetStartBitValue(vectorValue);
+	if (startBitValue == LITERAL_WORD)
+	{
+	newCompressedStream.push_back((~vectorValue) & ONE_LITERAL);
+	}else if (startBitValue == ONE_GAP_WORD)
+	{
+	newCompressedStream.push_back((vectorValue - ONE_GAP_START_FLAG + ZERO_GAP_START_FLAG));
+	}else if(startBitValue == ZERO_GAP_WORD)
+	{
+	newCompressedStream.push_back((vectorValue - ZERO_GAP_START_FLAG + ONE_GAP_START_FLAG));
+	}
+	vectorIterator++;
+	}
+	result->SetCompressedStream(newCompressedStream);
+	result->OriginalStreamSize(m_iOriginalStreamSize);
+	if (m_iActiveWordSize > 0)
+	{
+	result->ActiveWordSize(m_iActiveWordSize);
+	result->ActiveWord(~m_ulActiveWord);
+	}
+	return result;
+	}
+	*/
+	BitStreamInfo * WAHStructure::operator ~(){
 		WAHStructure * result = new WAHStructure();
+		WAHStructure * current_structure = dynamic_cast<WAHStructure *>(this);
 		vector<unsigned long int> newCompressedStream;
-		vector<unsigned long int>::iterator vectorIterator  = m_compressed_stream.begin();
-		while(vectorIterator != m_compressed_stream.end())
+		vector<unsigned long int>::iterator vectorIterator  = current_structure->GetCompressedVector().begin();
+		while(vectorIterator != current_structure->GetCompressedVector().end())
 		{
 			unsigned long int vectorValue = *(vectorIterator);
 			int startBitValue = GetStartBitValue(vectorValue);
@@ -1222,10 +1258,11 @@ namespace CompressedStructure{
 		}
 		result->SetCompressedStream(newCompressedStream);
 		result->OriginalStreamSize(m_iOriginalStreamSize);
-		if (m_iActiveWordSize > 0)
+		if (current_structure->ActiveWordSize() > 0)
 		{
-			result->ActiveWordSize(m_iActiveWordSize);
-			result->ActiveWord(~m_ulActiveWord);
+			result->ActiveWordSize(current_structure->ActiveWordSize());
+			result->ActiveWord(~(current_structure->ActiveWord()));
 		}
 		return result;
-	}}
+	}
+}

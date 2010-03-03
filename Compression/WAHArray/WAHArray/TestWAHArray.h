@@ -4,9 +4,9 @@ namespace CompressedStructure{
 	namespace TestStructure{
 		class TestWAHArray
 		{
-			
-		public:
 			enum operation_type{OR,AND};
+		public:
+			
 			TestWAHArray(void);
 			~TestWAHArray(void);
 			void RunTest(dynamic_bitset<> &_left_operand,dynamic_bitset<> & _right_operand,int _itest_no,operation_type type = AND);
