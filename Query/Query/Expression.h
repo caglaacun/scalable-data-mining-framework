@@ -14,41 +14,18 @@ private:
 	vector<Symbol*> expression;
 
 public:
-	Expression()
-	{
+	Expression();
 
-	}
+	Expression(Symbol* symbol);
 
-	Expression(Symbol* symbol)
-	{
-		expression.push_back(symbol);
-	}
+	~Expression();
 
-	~Expression()
-	{
-		//cout<<"delete"<<endl;
-	}
+	void addSymbolToExpression(Symbol* symbol);
 
-	void addSymbolToExpression(Symbol* symbol)
-	{
-		expression.push_back(symbol);
-	}
+	Symbol* getSymbolAt(size_t position);
 
-	Symbol* getSymbolAt(size_t position)
-	{
-		return expression[position];
-	}
+	size_t count();
 
-	size_t count(){
-		return expression.size();
-	}
-
-	void print()
-	{
-		for (int i=0;i<expression.size();i++)
-		{
-			cout<<expression[i]->toString()<<endl;
-		}
-	}
+	void print();
 };
 #endif

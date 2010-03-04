@@ -14,40 +14,19 @@ private:
 	size_t attributeIndex;
 	size_t bitStringIndex;
 public:
-	Operand()
-	{
+	Operand();
 
-	}
-	Operand(string name,size_t attributeIndex,size_t bitStringIndex)
-	{
-		this->name=name;
-		this->attributeIndex=attributeIndex;
-		this->bitStringIndex=bitStringIndex;
-		this->type=TYPEOPERAND;
-	}
-	~Operand()
-	{
+	Operand(string name,size_t attributeIndex,size_t bitStringIndex);
 
-	}
-	string getName()
-	{
-		return name;
-	}
-	size_t getAttributeIndex()
-	{
-		return attributeIndex;
-	}
-	size_t getbitStringIndex()
-	{
-		return bitStringIndex;
-	}
-	string toString()
-	{
-		stringstream atind;
-		atind << attributeIndex;
-		stringstream bits;
-		bits << bitStringIndex;
-		return name+" "+atind.str()+" "+bits.str();
-	}
+	~Operand();
+
+	string getName();
+
+	size_t getAttributeIndex();
+
+	size_t getbitStringIndex();
+
+	string toString();
+
 };
 #endif

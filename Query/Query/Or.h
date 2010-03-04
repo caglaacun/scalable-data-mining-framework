@@ -10,26 +10,15 @@ using namespace std;
 class Or:public Symbol
 {
 public:
-	Or()
-	{
+	Or();
 
-	}
-	Or(string name)
-	{
-		this->name=name;
-		this->type=TYPEOR;
-	}
-	~Or()
-	{
+	Or(string name);
 
-	}
-	string getName()
-	{
-		return name;
-	}
-	string toString()
-	{
-		return name;
-	}
+	~Or();
+
+	string getName();
+
+	string toString();
+
 };
 #endif

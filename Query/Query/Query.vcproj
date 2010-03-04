@@ -173,7 +173,55 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Main.cpp"
+				RelativePath=".\And.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DummyDataExtraction.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Expression.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\InfixToPostfix.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LeftBracket.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Not.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Olap.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Operand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Or.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Query.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RightBracket.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ScannerException.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Symbol.cpp"
 				>
 			</File>
 		</Filter>
@@ -270,6 +318,10 @@
 			>
 			<File
 				RelativePath=".\example-QueryAPI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Main.cpp"
 				>
 			</File>
 			<File

@@ -2,6 +2,7 @@
 #define QUERY
 
 #include <iostream>
+#include <string>
 #include <exception>
 
 #include "Expression.h"
@@ -16,44 +17,19 @@ private:
 	Expression* postfixExpression;
 	Expression* tokens;
 
-	void scan(string query)
-	{
-		Scanner s;
-		tokens = s.scan(query);
-	}
+	void scan(string query);
 
-	void parse()
-	{
+	void parse();
 
-	}
-
-	void makePostfixExpression()
-	{
-		InfixToPostfix itp;
-		postfixExpression = itp.makePostfixExpression(tokens);
-	}
+	void makePostfixExpression();
 
 public:
-	Query()
-	{
+	Query();
 
-	}
+	Query(string query) throw(exception);
 
-	Query(string query) throw(exception)
-	{
-		scan(query);
-		parse();
-		makePostfixExpression();
-	}
+	~Query();
 
-	~Query()
-	{
-
-	}
-
-	Expression* getPostfixExpression()
-	{
-		return postfixExpression;
-	}
+	Expression* getPostfixExpression();
 };
 #endif

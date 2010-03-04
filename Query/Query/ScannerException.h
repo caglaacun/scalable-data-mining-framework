@@ -8,18 +8,12 @@ using namespace std;
 
 class OperandSyntaxException: public exception
 {
-	virtual const char* what() const throw()
-	{
-		return "Error in operand syntax: use operands such as id[1,2]";
-	}
-}operandSyntaxException; 
+	virtual const char* what() const throw();
+};
 
 class SymbolException: public exception
 {
-	virtual const char* what() const throw()
-	{
-		return "Symbol is not valid";
-	}
-}symbolException; 
+	virtual const char* what() const throw();
+}; 
 
 #endif
