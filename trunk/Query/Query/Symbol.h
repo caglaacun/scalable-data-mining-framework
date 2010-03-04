@@ -20,9 +20,6 @@ protected:
 public:
 	virtual string getName()=0;
 	virtual string toString()=0;
-	size_t getType()
-	{
-		return type;
-	}
+	size_t getType();
 };
 #endif

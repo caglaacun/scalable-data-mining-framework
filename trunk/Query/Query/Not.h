@@ -10,26 +10,15 @@ using namespace std;
 class Not:public Symbol
 {
 public:
-	Not()
-	{
+	Not();
 
-	}
-	Not(string name)
-	{
-		this->name=name;
-		this->type=TYPENOT;
-	}
-	~Not()
-	{
+	Not(string name);
 
-	}
-	string getName()
-	{
-		return name;
-	}
-	string toString()
-	{
-		return name;
-	}
+	~Not();
+
+	string getName();
+
+	string toString();
+
 };
 #endif

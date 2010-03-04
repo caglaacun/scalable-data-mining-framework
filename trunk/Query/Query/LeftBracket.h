@@ -10,26 +10,15 @@ using namespace std;
 class LeftBracket:public Symbol
 {
 public:
-	LeftBracket()
-	{
+	LeftBracket();
 
-	}
-	LeftBracket(string name)
-	{
-		this->name=name;
-		this->type=TYPELEFTBRACKET;
-	}
-	~LeftBracket()
-	{
+	LeftBracket(string name);
 
-	}
-	string getName()
-	{
-		return name;
-	}
-	string toString()
-	{
-		return name;
-	}
+	~LeftBracket();
+
+	string getName();
+
+	string toString();
+
 };
 #endif

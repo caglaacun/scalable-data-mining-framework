@@ -10,26 +10,15 @@ using namespace std;
 class And:public Symbol
 {
 public:
-	And()
-	{
+	And();
 
-	}
-	And(string name)
-	{
-		this->name=name;
-		this->type=TYPEAND;
-	}
-	~And()
-	{
+	And(string name);
 
-	}
-	string getName()
-	{
-		return name;
-	}
-	string toString()
-	{
-		return name;
-	}
+	~And();
+
+	string getName();
+
+	string toString();
+
 };
 #endif

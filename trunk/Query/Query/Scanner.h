@@ -58,7 +58,8 @@ private:
 		}
 		else
 		{
-			throw operandSyntaxException;
+			OperandSyntaxException oe;
+			throw oe;
 		}
 	}
 public:
@@ -113,7 +114,8 @@ public:
 			}
 			else
 			{
-				throw symbolException;
+				SymbolException se;
+				throw se;
 			}
 		}
 		addOperand(operand);
