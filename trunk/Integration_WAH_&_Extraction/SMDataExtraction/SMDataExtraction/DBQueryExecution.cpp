@@ -81,7 +81,7 @@ namespace DBQueryExecutionInfo{
 					this->_intData.push_back(intAtt);
 				}
 
-				if ((columnType == SQL_DOUBLE) || (columnType == SQL_FLOAT) || (columnType == SQL_NUMERIC) || (columnType == SQL_REAL) || (columnType == SQL_DECIMAL))
+				else if ((columnType == SQL_DOUBLE) || (columnType == SQL_FLOAT) || (columnType == SQL_NUMERIC) || (columnType == SQL_REAL) || (columnType == SQL_DECIMAL))
 				{
 					PureDoubleAttInfo *doubleAtt=new PureDoubleAttInfo();
 
@@ -114,7 +114,7 @@ namespace DBQueryExecutionInfo{
 					this->_doubleData.push_back(doubleAtt);
 				}
 
-				if ((columnType == SQL_CHAR) || (columnType == SQL_VARCHAR) || (columnType == SQL_LONGVARCHAR) || (columnType < 0))
+				else if ((columnType == SQL_CHAR) || (columnType == SQL_VARCHAR) || (columnType == SQL_LONGVARCHAR) || (columnType < 0))
 				{
 					PureStringAttInfo *stringAtt = new PureStringAttInfo();
 					stringAtt->type = Type.MULTI_CAT;
@@ -133,7 +133,7 @@ namespace DBQueryExecutionInfo{
 					this->_stringData.push_back(stringAtt);
 				}
 				
-				if ((columnType == SQL_DATE) || (columnType == SQL_DATETIME) || (columnType == SQL_TYPE_DATE) || (columnType == SQL_TIMESTAMP))
+				else if ((columnType == SQL_DATE) || (columnType == SQL_DATETIME) || (columnType == SQL_TYPE_DATE) || (columnType == SQL_TIMESTAMP))
 				{
 					PureIntAttInfo *intAtt = new PureIntAttInfo();
 					intAtt->type=Type.TYPE_DATE;

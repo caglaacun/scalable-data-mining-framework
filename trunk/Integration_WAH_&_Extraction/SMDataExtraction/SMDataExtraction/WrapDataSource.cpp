@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <time.h>
 #include "AttributeType.h"
 
 using namespace std;
@@ -55,15 +56,22 @@ void WrapDataSource::encodeIntAttributes(vector<PureIntAttInfo*> intAtts){
 		encodedIntAtt->setTheSignBitMap(values,this->_noOfRows);
 		int j = 0;
 		vector<dynamic_bitset<>> convertedBitSet;
+		int temp = convertedBitSet.size();
+		int no_v_bitStreams = encodedIntAtt->NoOfVBitStreams();
+
 		for (; j < this->_noOfRows ; j++)
 		{
-			dynamic_bitset<> bitSet(encodedIntAtt->NoOfVBitStreams(),(unsigned long)abs(values[j]));
+			dynamic_bitset<> bitSet(no_v_bitStreams,(unsigned long)abs(values[j]));
 			convertedBitSet.push_back(bitSet);
 		}
 		encodedIntAtt->setVBitStreamSize(encodedIntAtt->NoOfVBitStreams());
-		for(int l = 0 ; l < convertedBitSet.size() ; l++)
+
+		time_t start,end;
+		start = clock();
+
+		for(int l = 0 ; l < temp ; l++)
 		{
-			for (int k = 0 ; k < encodedIntAtt->NoOfVBitStreams()  ; k++)
+			for (int k = 0 ; k < no_v_bitStreams  ; k++)
 			{
 					bool val = convertedBitSet.at(l)[k];
 					encodedIntAtt->vBitStreams().at(k)->setBitStreamAllocAttID(pureIntAtt->attID);
@@ -71,6 +79,8 @@ void WrapDataSource::encodeIntAttributes(vector<PureIntAttInfo*> intAtts){
 					encodedIntAtt->vBitStreams().at(k)->setBitValue(l,val);
 			}
 		}
+		end = clock();
+		cout<<"Time to encode Int data : "<<(end - start) << endl;
 		this->_codedIntAtts.push_back(encodedIntAtt);
 		if (encodedIntAtt->attributeID() == 0)
 		{
@@ -90,24 +100,35 @@ void WrapDataSource::encodeStringAttributes(vector<PureStringAttInfo*> stringAtt
 	{
 	for (int i = 0 ; i < stringAtts.size() ; i++)
 	{
-			PureStringAttInfo* stringAtt = stringAtts.at(i);
+		PureStringAttInfo* stringAtt = stringAtts.at(i);
 		EncodedMultiCatAttribute* multiCatAtt = new EncodedMultiCatAttribute();
 		multiCatAtt->setAttID(stringAtt->attID);
 		multiCatAtt->setAttName(stringAtt->attName);
 		multiCatAtt->setAttType(ATT_TYPE::MULTICAT_VAL);
 
+		time_t start,end;
+		start = clock();
 		multiCatAtt->mapStringDataToCategories(stringAtt->ValueList(),stringAtt->uniqueValueList(),this->_noOfRows);
+		end = clock();
 
-		for (int j = 0 ; j < multiCatAtt->mappedValList().size() ; j++)
+		cout<<"Time for mapping data to ints : "<<(end - start)<<endl;
+
+		start = clock();
+		vector<dynamic_bitset<>> convertedBitSet = multiCatAtt->mappedValList();
+		int temp = convertedBitSet.size();
+		int no_v_streams = multiCatAtt->NoOfVBitStreams();
+		for (int j = 0 ; j < temp ; j++)
 		{
-			for (int k = 0 ; k < multiCatAtt->NoOfVBitStreams()  ; k++)
+			for (int k = 0 ; k < no_v_streams  ; k++)
 			{
-					bool val = multiCatAtt->mappedValList().at(j)[k];
+					bool val = convertedBitSet.at(j)[k];
 					multiCatAtt->vBitStreams().at(k)->setBitStreamAllocAttID(stringAtt->attID);
 					multiCatAtt->vBitStreams().at(k)->setBitStreamAllocAttName(stringAtt->attName);
 					multiCatAtt->vBitStreams().at(k)->setBitValue(j,val);
 			}
 		}
+		end = clock();
+		cout<<"Time to encode converted data : "<<(end - start) << endl;
 		this->_codedStringAtts.push_back(multiCatAtt);
 
 		if (multiCatAtt->attributeID() == 0)
