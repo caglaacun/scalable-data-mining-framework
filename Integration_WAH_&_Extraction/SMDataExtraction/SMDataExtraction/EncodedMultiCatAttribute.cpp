@@ -30,16 +30,13 @@ void EncodedMultiCatAttribute::mapStringDataToCategories(string* _valueList,vect
 
 	MultiCatDataInfo *df = new MultiCatDataInfo(_uniqueValList);
 	this->_mappedIntVals = df->getAssignedEncodedNumberList();
-	
-// 	for (int j = 0 ; j < this->NoOfVBitStreams() ; j++)
-// 	{
-// 		this->vBitStreams()[j] = new VBitStream(noOfRows);
-// 	}
 
+	int no_v_bitStreams = this->NoOfVBitStreams();
 	for (int i = 0 ; i < noOfRows ; i++)
 	{
-		int pos = std::find(_uniqueValList.begin(),_uniqueValList.end(),_valueList[i]) - _uniqueValList.begin();
-		dynamic_bitset<> bitSet(this->NoOfVBitStreams(),(unsigned long)pos);
+		//int pos = std::find(_uniqueValList.begin(),_uniqueValList.end(),_valueList[i]) - _uniqueValList.begin();
+		int pos = binarySearch(_uniqueValList,_valueList[i],0,(_uniqueValList.size() - 1));
+		dynamic_bitset<> bitSet(no_v_bitStreams,(unsigned long)pos);
 		this->_mappedValList.push_back(bitSet);
 	}
 
@@ -66,4 +63,17 @@ string EncodedMultiCatAttribute::decodeTheTuple(int tupleID){
 	val = (int)temp.to_ulong();
 	
 	return this->_uniqueValList.at(val);
+}
+
+int EncodedMultiCatAttribute::binarySearch(std::vector<string> arr, std::string value, int left, int right){
+	while (left <= right) {
+		int middle = (left + right) / 2;
+		if (arr[middle] == value)
+			return middle;
+		else if (arr[middle] > value)
+			right = middle - 1;
+		else
+			left = middle + 1;
+	}
+	return -1;
 }

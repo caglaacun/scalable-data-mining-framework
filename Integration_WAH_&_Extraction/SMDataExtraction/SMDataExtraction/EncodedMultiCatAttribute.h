@@ -22,6 +22,7 @@ public:
 	__declspec(dllexport) int noOfUniqueValues();
 	__declspec(dllexport) string decodeTheTuple(int tupleID);
 	void mapStringDataToCategories(string* _valueList,vector<string> _uniqueValList,int noOfRows);
+	int binarySearch(vector<string> arr, string value, int left, int right);
 
 private:
 	int* _mappedIntVals;
