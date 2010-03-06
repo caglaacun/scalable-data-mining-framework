@@ -15,6 +15,7 @@
 #include "bitstreaminfortest.h"
 #include "DBConnection.h"
 #include "testcompressionhandler.h"
+#include "testalgoutil.h"
 
 using namespace std;
 using namespace boost;
@@ -30,10 +31,9 @@ void TestDataConnection();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	TestCompressionHandler test;
-	test.TestCompression();
-//	TestDataConnection();
-return 0;
+	TestAlgoUtil test;
+	test.TestPatternFindBitInfoMethod();
+	return 0;
 }
 
 void TestDataConnection()

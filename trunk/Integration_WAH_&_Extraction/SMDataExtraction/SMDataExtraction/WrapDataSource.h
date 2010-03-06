@@ -25,6 +25,7 @@ public:
 	__declspec(dllexport) BitStreamInfo* operator()(const int attID,const int bitStreamID);
 	void encodeIntAttributes(vector<PureIntAttInfo*> intAtts);
 	void encodeStringAttributes(vector<PureStringAttInfo*> stringAtts);
+	__declspec(dllexport) void CodedAtts(vector<EncodedAttributeInfo *> _coded_atts );
 	
 
 private:

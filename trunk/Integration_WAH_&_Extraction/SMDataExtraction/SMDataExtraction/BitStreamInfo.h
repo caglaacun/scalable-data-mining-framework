@@ -2,13 +2,14 @@
 #include "boost/dynamic_bitset.hpp"
 #include <vector>
 #include <string>
+#include <iostream>
 
 using namespace boost;
 using namespace std;
 
 class BitStreamInfo{
 public:
-	
+	static enum vertical_bit_type{WAH_COMPRESSION,VERTICAL_STREAM_FORMAT};
 	__declspec(dllexport) BitStreamInfo();
 	__declspec(dllexport) BitStreamInfo(int bitCount);
 	__declspec(dllexport) ~BitStreamInfo();
@@ -19,6 +20,7 @@ public:
 	//__declspec(dllexport) virtual vector<unsigned long int>& getCompressedVector() = 0;
 	__declspec(dllexport) virtual dynamic_bitset<> Decompress() = 0;
 	__declspec(dllexport) virtual void CompressWords(boost::dynamic_bitset<>& bitMap) = 0;
+	__declspec(dllexport) virtual unsigned long long Count() = 0;
 	//__declspec(dllexport) virtual void flip() = 0;
 	//__declspec(dllexport) virtual int getMainArrayLength() = 0;
 	//__declspec(dllexport) virtual dynamic_bitset<> getCompressedWord() = 0;
@@ -27,9 +29,9 @@ public:
 
 	__declspec(dllexport) virtual BitStreamInfo* operator~() = 0;
 
- 	__declspec(dllexport) virtual BitStreamInfo* operator &(BitStreamInfo &) = 0;
+	__declspec(dllexport) virtual BitStreamInfo* operator &(BitStreamInfo &) = 0;
 
- 	__declspec(dllexport) virtual BitStreamInfo* operator |(BitStreamInfo &) = 0;
+	__declspec(dllexport) virtual BitStreamInfo* operator |(BitStreamInfo &) = 0;
 
 	//__declspec(dllexport) virtual const unsigned long int ActiveWordSize() = 0 ;
 	//__declspec(dllexport) virtual void ActiveWordSize(unsigned long int val) = 0;
@@ -49,7 +51,10 @@ public:
 	__declspec(dllexport) void setBitStreamAllocAttID(int attID){this->_bitStreamAllocAttID = attID;}
 	__declspec(dllexport) string BitStreamAllocAttName() {return this->_bitStreamAllocAttName;}
 	__declspec(dllexport) void setBitStreamAllocAttName(string attName){this->_bitStreamAllocAttName = attName;}
-/*
+	__declspec(dllexport) BitStreamInfo::vertical_bit_type Type();
+	__declspec(dllexport) void Type(BitStreamInfo::vertical_bit_type val);
+	__declspec(dllexport) void Print(void);
+	/*
 	static const unsigned long int ZERO_LITERAL = 0;
 	static const unsigned long int ONE_LITERAL = 2147483647;
 	static const unsigned long int ONE_GAP_START_FLAG = 3221225472;
@@ -57,8 +62,9 @@ public:
 	static const int LITERAL_WORD = 0;
 	static const int ZERO_GAP_WORD = 1;
 	static const int ONE_GAP_WORD = 2;
-*/
+	*/
 private:
+	vertical_bit_type m_type;	
 	int _bitCount;
 	dynamic_bitset<> _decompressedVBitStream;
 	int _bitStreamAllocAttID;

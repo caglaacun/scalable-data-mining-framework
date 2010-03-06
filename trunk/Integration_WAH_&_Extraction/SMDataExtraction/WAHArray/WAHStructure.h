@@ -23,7 +23,7 @@ namespace CompressedStructure{
 		BitStreamInfo* operator~();
 		virtual BitStreamInfo* operator &(BitStreamInfo &);
 		BitStreamInfo* operator |(BitStreamInfo &);
-
+		unsigned long long Count();		
 		
 		// Overloaded operators
 	
@@ -44,7 +44,7 @@ namespace CompressedStructure{
 		void ActiveWord(unsigned long int val) { m_ulActiveWord = val; }
 		int OriginalStreamSize() const { return m_iOriginalStreamSize; }
 		void OriginalStreamSize(unsigned long int val) { m_iOriginalStreamSize = val; }
-		unsigned long long Count();		
+
 
 		enum operation_type {AND,OR};
 

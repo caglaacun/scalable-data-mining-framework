@@ -66,7 +66,7 @@ namespace CompressedStructure{
 
 		if (ActiveWordSize() > 0)
 		{
-			unsigned long active  = ActiveWord();
+			unsigned long int active  = ActiveWord();
 			count_val += GetLiteralCount(active);
 		}
 		return count_val;
@@ -1260,8 +1260,11 @@ namespace CompressedStructure{
 		result->OriginalStreamSize(m_iOriginalStreamSize);
 		if (current_structure->ActiveWordSize() > 0)
 		{
+			//Very Inefficient method. Should Rewrite after evaluation
 			result->ActiveWordSize(current_structure->ActiveWordSize());
-			result->ActiveWord(~(current_structure->ActiveWord()));
+			dynamic_bitset<> temp(ActiveWordSize(),ActiveWord());
+			temp.flip();
+			result->ActiveWord(temp.to_ulong());
 		}
 		return result;
 	}
