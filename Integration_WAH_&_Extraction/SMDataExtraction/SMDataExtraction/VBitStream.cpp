@@ -40,7 +40,7 @@ dynamic_bitset<> VBitStream::Decompress(){
 }
 
 void VBitStream::CompressWords(boost::dynamic_bitset<>& bitMap){
-
+this->convert(bitMap);
 }
 
 // void VBitStream::flip(){

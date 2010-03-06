@@ -12,6 +12,7 @@ class WrapDataSource
 {
 public:
 	__declspec(dllexport) WrapDataSource(DBQueryExecution cExec,int dataSourceID);
+	__declspec(dllexport) WrapDataSource(void);
 	__declspec(dllexport) ~WrapDataSource(void);
 	__declspec(dllexport) int noOfRows();
 	__declspec(dllexport) int noOfAttributes();

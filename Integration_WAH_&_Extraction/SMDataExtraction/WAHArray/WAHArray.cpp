@@ -14,6 +14,7 @@
 #include "BitStreamInfo.h"
 #include "bitstreaminfortest.h"
 #include "DBConnection.h"
+#include "testcompressionhandler.h"
 
 using namespace std;
 using namespace boost;
@@ -29,7 +30,8 @@ void TestDataConnection();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-WAHStructureBecnhmarkAND();
+	TestCompressionHandler test;
+	test.TestCompression();
 //	TestDataConnection();
 return 0;
 }

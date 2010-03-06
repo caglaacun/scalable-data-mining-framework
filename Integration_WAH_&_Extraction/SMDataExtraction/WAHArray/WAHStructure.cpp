@@ -1196,7 +1196,7 @@ namespace CompressedStructure{
 		dynamic_bitset<> resultBitset = ConvertVectorToBitmap(result);
 		if (m_iActiveWordSize > 0)
 		{
-			dynamic_bitset<> temp((int)m_iActiveWordSize,m_ulActiveWord);
+			dynamic_bitset<> temp(m_iActiveWordSize,m_ulActiveWord);
 			for (size_t i = 0; i < temp.size() ; i++)
 			{
 				resultBitset.push_back(temp[i]);
