@@ -75,6 +75,10 @@ BitStreamInfo* VBitStream::operator |(BitStreamInfo &){
 	return new VBitStream();
 }
 
+unsigned long long VBitStream::Count(){
+	return (unsigned long long)this->count();
+}
+
 // const unsigned long  int VBitStream::ActiveWordSize(){
 // 	return this->getProcessedBitStream().size();
 // }

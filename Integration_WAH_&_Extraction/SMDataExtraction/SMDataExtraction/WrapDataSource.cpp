@@ -28,8 +28,6 @@ WrapDataSource::~WrapDataSource(void)
 {
 }
 
-
-
 void WrapDataSource::encodeAtrributes(){
 	encodeIntAttributes(this->_queryDataInfo.RetievedIntData());
 	encodeStringAttributes(this->_queryDataInfo.RetrievedStringData());
@@ -41,6 +39,11 @@ int WrapDataSource::noOfAttributes(){
 
 int WrapDataSource::noOfRows(){
 	return this->_noOfRows;
+}
+
+void WrapDataSource::CodedAtts(vector<EncodedAttributeInfo *> _coded_atts )
+{
+	this->_codedAtts = _coded_atts;
 }
 
 void WrapDataSource::encodeIntAttributes(vector<PureIntAttInfo*> intAtts){
@@ -229,3 +232,4 @@ EncodedAttributeInfo* WrapDataSource::operator ()(const int attID){
 BitStreamInfo* WrapDataSource::operator ()(const int attID, const int BitStreamID){
 	return (*(this->_codedAtts[attID]))(BitStreamID);
 }
+

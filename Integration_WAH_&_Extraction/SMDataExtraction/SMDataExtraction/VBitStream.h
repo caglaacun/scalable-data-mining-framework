@@ -33,6 +33,7 @@ public:
 //	__declspec(dllexport) vector<unsigned long int>& getCompressedVector();
 	__declspec(dllexport) dynamic_bitset<> Decompress();
 	__declspec(dllexport) void CompressWords(boost::dynamic_bitset<>& bitMap);
+	__declspec(dllexport) unsigned long long Count();
 //	__declspec(dllexport) void flip();
 //	__declspec(dllexport) int getMainArrayLength();
 //	__declspec(dllexport) dynamic_bitset<> getCompressedWord();

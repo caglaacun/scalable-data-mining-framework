@@ -8,7 +8,6 @@
 
 
 using namespace CompressedStructure;
-using namespace DBConnectionInfo;
 //using namespace CompressedStructure::TestStructure;
 
 class CompressionHandler
