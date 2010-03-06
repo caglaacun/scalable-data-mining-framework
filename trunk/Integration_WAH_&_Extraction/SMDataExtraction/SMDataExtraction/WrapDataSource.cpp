@@ -20,6 +20,10 @@ WrapDataSource::WrapDataSource(DBQueryExecution cExec,int dataSourceID)
 	this->_dataSourceID = dataSourceID;
 }
 
+WrapDataSource::WrapDataSource(void)
+{
+
+}
 WrapDataSource::~WrapDataSource(void)
 {
 }

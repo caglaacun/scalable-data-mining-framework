@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSMDataExtraction", "Tes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WAHArray", "WAHArray\WAHArray.vcproj", "{D9B5D438-1911-4782-9BCD-9990879FCB10}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Algorithm", "Algorithm\Algorithm.vcproj", "{2DFA5773-3869-41FF-904B-A1C302A7ECE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -25,6 +27,10 @@ Global
 		{D9B5D438-1911-4782-9BCD-9990879FCB10}.Debug|Win32.Build.0 = Debug|Win32
 		{D9B5D438-1911-4782-9BCD-9990879FCB10}.Release|Win32.ActiveCfg = Release|Win32
 		{D9B5D438-1911-4782-9BCD-9990879FCB10}.Release|Win32.Build.0 = Release|Win32
+		{2DFA5773-3869-41FF-904B-A1C302A7ECE7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2DFA5773-3869-41FF-904B-A1C302A7ECE7}.Debug|Win32.Build.0 = Debug|Win32
+		{2DFA5773-3869-41FF-904B-A1C302A7ECE7}.Release|Win32.ActiveCfg = Release|Win32
+		{2DFA5773-3869-41FF-904B-A1C302A7ECE7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

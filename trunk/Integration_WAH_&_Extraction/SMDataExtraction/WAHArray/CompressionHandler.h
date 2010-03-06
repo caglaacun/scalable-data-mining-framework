@@ -1,23 +1,24 @@
+#pragma once
 #include "WrapDataSource.h"
 #include "DataSources.h"
 #include "EncodedAttributeInfo.h"
 #include "BitStreamInfo.h"
 #include "WAHStructure.h"
 #include <vector>
-//#include "EncodedAttributeInfo.h"
-//#include "BitStreamInfo.h"
-#pragma once
+
+
 using namespace CompressedStructure;
+using namespace DBConnectionInfo;
+//using namespace CompressedStructure::TestStructure;
 
 class CompressionHandler
 {
-public:
-	enum vertical_bit_type{WAH_COMPRESSION, VERTICAL_STREAM_FORMAT};
-	void ConvertTo(WrapDataSource * _pdata_source, vertical_bit_type _end_type);
+public:	
+	void ConvertTo(WrapDataSource * _pdata_source, BitStreamInfo::vertical_bit_type _end_type);
 	CompressionHandler(void);
 	~CompressionHandler(void);
 
 private :	
-	void ConvertAttributeTo(EncodedAttributeInfo * _attribute,vertical_bit_type _end_type);
-	void ConvertBitStreamTo(BitStreamInfo * _bit_stream,vertical_bit_type _end_type);
+	void ConvertAttributeTo(EncodedAttributeInfo * _attribute,BitStreamInfo::vertical_bit_type _end_type);
+	BitStreamInfo * ConvertBitStreamTo( BitStreamInfo * _bit_stream,BitStreamInfo::vertical_bit_type _end_type );
 };

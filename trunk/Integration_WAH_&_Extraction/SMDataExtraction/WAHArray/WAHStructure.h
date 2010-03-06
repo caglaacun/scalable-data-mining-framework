@@ -38,8 +38,8 @@ namespace CompressedStructure{
 		unsigned long int GetOriginalStreamLength();
 
 		//Public Getters and setters
-		const unsigned long int ActiveWordSize() const { return m_iActiveWordSize; }
-		void ActiveWordSize(unsigned long int val) { m_iActiveWordSize = val; }
+		const int ActiveWordSize() const { return m_iActiveWordSize; }
+		void ActiveWordSize(int val) { m_iActiveWordSize = val; }
 		unsigned long int ActiveWord() const { return m_ulActiveWord; }
 		void ActiveWord(unsigned long int val) { m_ulActiveWord = val; }
 		int OriginalStreamSize() const { return m_iOriginalStreamSize; }
@@ -80,7 +80,7 @@ namespace CompressedStructure{
 		int * m_iMainArray;
 		unsigned long int m_iOriginalStreamSize;			
 		unsigned long int m_ulActiveWord;	
-		unsigned long int m_iActiveWordSize;	
+		int m_iActiveWordSize;	
 		static const int WORD_SIZE = 32;		
 
 	};
